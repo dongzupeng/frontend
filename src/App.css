@@ -21,6 +21,23 @@ body {
   flex-direction: column;
 }
 
+/* 全屏幕应用容器（无头部和底部） */
+.app-full {
+  min-height: 100vh;
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 全屏幕主内容区域 */
+.main-full {
+  flex: 1;
+  padding: 2rem;
+  background-color: #ffffff;
+  width: 100%;
+  box-sizing: border-box;
+}
+
 /* 头部样式 - 参考微信公众号 */
 .header {
   background-color: #ffffff;
