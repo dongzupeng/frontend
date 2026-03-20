@@ -24,7 +24,10 @@ export interface CreateArticleDto {
 
 // 创建axios实例
 const api = axios.create({
-  baseURL: 'http://localhost:3001/api',
+  // 根据环境变量动态设置baseURL
+  // 开发环境：http://localhost:3001/api
+  // 生产环境：使用VITE_API_BASE_URL环境变量
+  baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001/api',
   headers: {
     'Content-Type': 'application/json',
   },
