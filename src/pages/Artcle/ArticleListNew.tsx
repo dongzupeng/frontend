@@ -11,6 +11,7 @@ interface ArticleListProps {
 
 const ArticleList: React.FC<ArticleListProps> = ({ searchTerm }) => {
   const navigate = useNavigate();
+  const [allArticles, setAllArticles] = useState<Article[]>([]);
   const [filteredArticles, setFilteredArticles] = useState<Article[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -26,36 +27,12 @@ const ArticleList: React.FC<ArticleListProps> = ({ searchTerm }) => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [itemsPerPage] = useState<number>(10);
 
+  // 首次加载时获取所有文章数据
   const fetchArticles = async () => {
     try {
       setLoading(true);
       const data = await articleApi.getAll();
-      
-      // 过滤文章
-      let processedArticles = data;
-      if (searchTerm) {
-        processedArticles = data.filter(article => 
-          article.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          article.content.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          article.author.toLowerCase().includes(searchTerm.toLowerCase())
-        );
-      }
-      
-      // 排序文章
-      processedArticles.sort((a, b) => {
-        if (sortBy === 'createdAt') {
-          const dateA = new Date(a.createdAt).getTime();
-          const dateB = new Date(b.createdAt).getTime();
-          return sortOrder === 'asc' ? dateA - dateB : dateB - dateA;
-        } else {
-          // 按阅读量排序
-          return sortOrder === 'asc' ? a.views - b.views : b.views - a.views;
-        }
-      });
-      
-      setFilteredArticles(processedArticles);
-      // 重置到第一页
-      setCurrentPage(1);
+      setAllArticles(data);
     } catch (err) {
       setError('Failed to fetch articles');
     } finally {
@@ -63,9 +40,39 @@ const ArticleList: React.FC<ArticleListProps> = ({ searchTerm }) => {
     }
   };
 
+  // 当搜索词、排序方式或排序顺序变化时，在前端进行过滤和排序
+  useEffect(() => {
+    // 过滤文章
+    let processedArticles = allArticles;
+    if (searchTerm) {
+      processedArticles = allArticles.filter(article => 
+        article.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        article.content.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        article.author.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+    
+    // 排序文章
+    processedArticles.sort((a, b) => {
+      if (sortBy === 'createdAt') {
+        const dateA = new Date(a.createdAt).getTime();
+        const dateB = new Date(b.createdAt).getTime();
+        return sortOrder === 'asc' ? dateA - dateB : dateB - dateA;
+      } else {
+        // 按阅读量排序
+        return sortOrder === 'asc' ? a.views - b.views : b.views - a.views;
+      }
+    });
+    
+    setFilteredArticles(processedArticles);
+    // 重置到第一页
+    setCurrentPage(1);
+  }, [searchTerm, sortBy, sortOrder, allArticles]);
+
+  // 只在组件首次加载时获取数据
   useEffect(() => {
     fetchArticles();
-  }, [searchTerm, sortBy, sortOrder]);
+  }, []);
 
   if (loading) {
     return <div>Loading...</div>;
