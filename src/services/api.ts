@@ -1,0 +1,73 @@
+import axios from 'axios';
+
+// 定义文章类型
+export interface Article {
+  id: number;
+  title: string;
+  content: string;
+  author: string;
+  coverImage: string;
+  isPublished: boolean;
+  views: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+// 定义创建/更新文章的类型
+export interface CreateArticleDto {
+  title: string;
+  content: string;
+  author: string;
+  coverImage: string;
+  isPublished: boolean;
+}
+
+// 创建axios实例
+const api = axios.create({
+  baseURL: 'http://localhost:3001/api',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
+
+// 请求拦截器
+api.interceptors.request.use(
+  (config) => {
+    // 可以在这里添加认证token等
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
+// 响应拦截器
+api.interceptors.response.use(
+  (response) => {
+    return response;
+  },
+  (error) => {
+    // 统一错误处理
+    console.error('API Error:', error);
+    return Promise.reject(error);
+  }
+);
+
+// 文章API封装
+export const articleApi = {
+  getAll: (): Promise<Article[]> => {
+    return api.get('/articles').then((response) => response.data);
+  },
+  getOne: (id: number): Promise<Article> => {
+    return api.get(`/articles/${id}`).then((response) => response.data);
+  },
+  create: (article: CreateArticleDto): Promise<Article> => {
+    return api.post('/articles', article).then((response) => response.data);
+  },
+  update: (id: number, article: Partial<CreateArticleDto>): Promise<Article> => {
+    return api.put(`/articles/${id}`, article).then((response) => response.data);
+  },
+  delete: (id: number): Promise<void> => {
+    return api.delete(`/articles/${id}`).then(() => {});
+  },
+};
