@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { articleApi } from '../../services/api';
-import type { CreateArticleDto } from '../../services/api';
+import type { CreateArticleDto } from '../../types/index';
 
 interface ArticleFormProps {
   isEdit?: boolean;

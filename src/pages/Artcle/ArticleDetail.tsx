@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { articleApi } from '../../services/api';
-import type { Article } from '../../services/api';
+import type { Article } from '../../types/index';
 
 const ArticleDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();

@@ -1,26 +1,12 @@
 import axios from 'axios';
-
-// 定义文章类型
-export interface Article {
-  id: number;
-  title: string;
-  content: string;
-  author: string;
-  coverImage: string;
-  isPublished: boolean;
-  views: number;
-  createdAt: string;
-  updatedAt: string;
-}
-
-// 定义创建/更新文章的类型
-export interface CreateArticleDto {
-  title: string;
-  content: string;
-  author: string;
-  coverImage: string;
-  isPublished: boolean;
-}
+import type {
+  Article,
+  CreateArticleDto,
+  User,
+  LoginDto,
+  RegisterDto,
+  LoginResponse
+} from '../types/index';
 
 // 创建axios实例
 const api = axios.create({
@@ -33,7 +19,11 @@ const api = axios.create({
 // 请求拦截器
 api.interceptors.request.use(
   (config) => {
-    // 可以在这里添加认证token等
+    // 添加认证token
+    const token = localStorage.getItem('token');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
     return config;
   },
   (error) => {
@@ -69,5 +59,18 @@ export const articleApi = {
   },
   delete: (id: number): Promise<void> => {
     return api.delete(`/articles/${id}`).then(() => {});
+  },
+};
+
+// 认证API封装
+export const authApi = {
+  login: (credentials: LoginDto): Promise<LoginResponse> => {
+    return api.post('/auth/login', credentials).then((response) => response.data);
+  },
+  register: (userData: RegisterDto): Promise<User> => {
+    return api.post('/auth/register', userData).then((response) => response.data);
+  },
+  getCurrentUser: (): Promise<User> => {
+    return api.get('/auth/me').then((response) => response.data);
   },
 };

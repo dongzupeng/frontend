@@ -1,0 +1,21 @@
+/* 底部样式 */
+.footer {
+  background-color: #ffffff;
+  padding: 1.5rem 0;
+  border-top: 1px solid #f0f0f0;
+  margin-top: 2rem;
+  flex-shrink: 0;
+}
+
+.footer-content {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  text-align: center;
+}
+
+.footer p {
+  font-size: 0.9rem;
+  color: #999;
+  margin: 0;
+}

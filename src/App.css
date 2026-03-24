@@ -32,7 +32,6 @@ body {
 /* 全屏幕主内容区域 */
 .main-full {
   flex: 1;
-  padding: 2rem;
   background-color: #ffffff;
   width: 100%;
   box-sizing: border-box;
@@ -1213,5 +1212,100 @@ body {
   .retry-button {
     padding: 0.6rem 1.2rem;
     font-size: 0.9rem;
+  }
+}
+
+/* 认证菜单样式 */
+.auth-menu {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.user-name {
+  font-size: 0.9rem;
+  color: #333;
+  margin-right: 0.5rem;
+}
+
+.login-button, .register-button, .logout-button {
+  padding: 0.4rem 0.8rem;
+  border: none;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.login-button {
+  background-color: #f0f0f0;
+  color: #333;
+}
+
+.login-button:hover {
+  background-color: #e0e0e0;
+}
+
+.register-button {
+  background-color: #1890ff;
+  color: white;
+}
+
+.register-button:hover {
+  background-color: #40a9ff;
+}
+
+.logout-button {
+  background-color: #ff4d4f;
+  color: white;
+}
+
+.logout-button:hover {
+  background-color: #ff7875;
+}
+
+/* 创建文章按钮使用与action-button相同的样式 */
+.create-button {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-block;
+  background-color: #52c41a;
+  color: white;
+  box-shadow: 0 2px 4px rgba(51, 51, 51, 0.1);
+}
+
+.create-button:hover {
+  background-color: #73d13d;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(82, 196, 26, 0.3);
+}
+
+/* 响应式设计 - 认证菜单 */
+@media (max-width: 768px) {
+  .auth-menu {
+    gap: 0.25rem;
+  }
+  
+  .login-button, .register-button, .logout-button {
+    padding: 0.3rem 0.6rem;
+    font-size: 0.7rem;
+  }
+  
+  .create-button {
+    padding: 0.5rem 1rem;
+    font-size: 0.85rem;
+  }
+  
+  .user-name {
+    font-size: 0.8rem;
+    margin-right: 0.25rem;
   }
 }

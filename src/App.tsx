@@ -1,9 +1,13 @@
 import { useState } from 'react';
-import './App.css'
+import './styles/index.css'
 import { BrowserRouter as Router, Routes, Route, Link, useParams, Outlet, useOutletContext } from 'react-router-dom'
 import ArticleList from './pages/Artcle/ArticleListNew.tsx'
 import ArticleDetail from './pages/Artcle/ArticleDetail.tsx'
 import ArticleForm from './pages/Artcle/ArticleForm.tsx'
+import Login from './pages/Auth/Login.tsx'
+import Register from './pages/Auth/Register.tsx'
+import PrivateRoute from './components/PrivateRoute.tsx'
+import { AuthProvider, useAuth } from './contexts/AuthContext.tsx'
 
 // 编辑页面包装组件
 const EditArticlePage = () => {
@@ -14,6 +18,11 @@ const EditArticlePage = () => {
 // 带头部和底部的布局组件
 const MainLayout = () => {
   const [searchTerm, setSearchTerm] = useState<string>('');
+  const { user, logout, isAuthenticated } = useAuth();
+  
+  const handleLogout = () => {
+    logout();
+  };
   
   return (
     <div className="app">
@@ -33,7 +42,26 @@ const MainLayout = () => {
               />
               <span className="search-icon">🔍</span>
             </div>
-            <div className="menu-icon">☰</div>
+            {isAuthenticated ? (
+              <div className="auth-menu">
+                <span className="user-name">{user?.username}</span>
+                <button className="logout-button" onClick={handleLogout}>
+                  退出
+                </button>
+                <Link to="/create" className="create-button">
+                  写文章
+                </Link>
+              </div>
+            ) : (
+              <div className="auth-menu">
+                <Link to="/login" className="login-button">
+                  登录
+                </Link>
+                <Link to="/register" className="register-button">
+                  注册
+                </Link>
+              </div>
+            )}
           </div>
         </div>
       </header>
@@ -62,21 +90,27 @@ const FormLayout = () => {
 
 function App() {
   return (
-    <Router>
-      <Routes>
-        {/* 带头部和底部的路由 */}
-        <Route element={<MainLayout />}>
-          <Route path="/" element={<ArticleListWrapper />} />
-        </Route>
-        
-        {/* 不带头部和底部的路由 */}
-        <Route element={<FormLayout />}>
-          <Route path="/article/:id" element={<ArticleDetail />} />
-          <Route path="/create" element={<ArticleForm />} />
-          <Route path="/edit/:id" element={<EditArticlePage />} />
-        </Route>
-      </Routes>
-    </Router>
+    <AuthProvider>
+      <Router>
+        <Routes>
+          {/* 带头部和底部的路由 */}
+          <Route element={<MainLayout />}>
+            <Route path="/" element={<ArticleListWrapper />} />
+          </Route>
+          
+          {/* 不带头部和底部的路由 */}
+          <Route element={<FormLayout />}>
+            <Route path="/article/:id" element={<ArticleDetail />} />
+            <Route element={<PrivateRoute />}>
+              <Route path="/create" element={<ArticleForm />} />
+              <Route path="/edit/:id" element={<EditArticlePage />} />
+            </Route>
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+          </Route>
+        </Routes>
+      </Router>
+    </AuthProvider>
   )
 }
 

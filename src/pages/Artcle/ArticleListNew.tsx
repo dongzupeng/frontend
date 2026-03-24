@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { articleApi } from '../../services/api';
-import type { Article } from '../../services/api';
+import type { Article } from '../../types/index';
 import ConfirmDialog from '../../components/ConfirmDialog';
 import CustomSelect from '../../components/CustomSelect';
 
