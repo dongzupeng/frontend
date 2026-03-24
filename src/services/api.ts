@@ -74,6 +74,6 @@ export const authApi = {
     return api.get('/auth/me').then((response) => response.data);
   },
   logout: (): Promise<void> => {
-    return api.post('/auth/logout').then(() => {});
+    return api.post('/auth/logout').then((response) => response.data);
   },
 };

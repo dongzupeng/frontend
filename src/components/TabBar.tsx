@@ -5,7 +5,7 @@ interface TabBarProps {
   isAuthenticated: boolean;
 }
 
-const TabBar: React.FC<TabBarProps> = ({ isAuthenticated }) => {
+const TabBar: React.FC<TabBarProps> = ({}) => {
   const location = useLocation();
   
   const getTabClass = (path: string) => {
