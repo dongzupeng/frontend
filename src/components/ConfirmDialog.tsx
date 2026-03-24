@@ -23,18 +23,18 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
         <div className="confirm-dialog-header">
           <h3>{title}</h3>
         </div>
-        <div className="confirm-dialog-body">
+        <div className="confirm-dialog-content">
           <p>{message}</p>
         </div>
         <div className="confirm-dialog-footer">
           <button 
-            className="action-button cancel-button" 
+            className="confirm-dialog-button cancel" 
             onClick={onCancel}
           >
             取消
           </button>
           <button 
-            className="action-button delete-button" 
+            className="confirm-dialog-button confirm" 
             onClick={onConfirm}
           >
             确认

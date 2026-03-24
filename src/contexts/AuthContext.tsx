@@ -71,10 +71,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
-  const logout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    setUser(null);
+  const logout = async () => {
+    try {
+      // 调用后端退出接口
+      await authApi.logout();
+    } catch (err) {
+      console.error('Logout API call failed:', err);
+    } finally {
+      // 无论接口调用成功与否，都清除本地存储
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      setUser(null);
+    }
   };
 
   const value = {

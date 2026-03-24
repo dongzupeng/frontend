@@ -73,4 +73,7 @@ export const authApi = {
   getCurrentUser: (): Promise<User> => {
     return api.get('/auth/me').then((response) => response.data);
   },
+  logout: (): Promise<void> => {
+    return api.post('/auth/logout').then(() => {});
+  },
 };

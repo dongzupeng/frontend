@@ -123,18 +123,12 @@ const ArticleList: React.FC<ArticleListProps> = ({ searchTerm }) => {
             </button>
           </div>
         </div>
-        <button className="action-button create-button" onClick={() => navigate('/create')}>
-          创建文章
-        </button>
       </div>
       {filteredArticles.length === 0 ? (
         <div className="empty-state">
           <div className="empty-icon">📝</div>
           <h3>暂无文章</h3>
-          <p>还没有发布任何文章，快来添加第一篇文章吧！</p>
-          <button className="action-button create-button" onClick={() => navigate('/create')}>
-            创建第一篇文章
-          </button>
+          <p>还没有发布任何文章</p>
         </div>
       ) : (
         <div className="article-list-content">

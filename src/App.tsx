@@ -6,7 +6,9 @@ import ArticleDetail from './pages/Artcle/ArticleDetail.tsx'
 import ArticleForm from './pages/Artcle/ArticleForm.tsx'
 import Login from './pages/Auth/Login.tsx'
 import Register from './pages/Auth/Register.tsx'
+import Profile from './pages/Profile/Profile.tsx'
 import PrivateRoute from './components/PrivateRoute.tsx'
+import TabBar from './components/TabBar.tsx'
 import { AuthProvider, useAuth } from './contexts/AuthContext.tsx'
 
 // 编辑页面包装组件
@@ -18,11 +20,7 @@ const EditArticlePage = () => {
 // 带头部和底部的布局组件
 const MainLayout = () => {
   const [searchTerm, setSearchTerm] = useState<string>('');
-  const { user, logout, isAuthenticated } = useAuth();
-  
-  const handleLogout = () => {
-    logout();
-  };
+  const { isAuthenticated } = useAuth();
   
   return (
     <div className="app">
@@ -42,37 +40,13 @@ const MainLayout = () => {
               />
               <span className="search-icon">🔍</span>
             </div>
-            {isAuthenticated ? (
-              <div className="auth-menu">
-                <span className="user-name">{user?.username}</span>
-                <button className="logout-button" onClick={handleLogout}>
-                  退出
-                </button>
-                <Link to="/create" className="create-button">
-                  写文章
-                </Link>
-              </div>
-            ) : (
-              <div className="auth-menu">
-                <Link to="/login" className="login-button">
-                  登录
-                </Link>
-                <Link to="/register" className="register-button">
-                  注册
-                </Link>
-              </div>
-            )}
           </div>
         </div>
       </header>
       <main className="main">
         <Outlet context={{ searchTerm }} />
       </main>
-      <footer className="footer">
-        <div className="footer-content">
-          <p>© 2026 个人公众号</p>
-        </div>
-      </footer>
+      <TabBar isAuthenticated={isAuthenticated} />
     </div>
   );
 };
@@ -88,6 +62,16 @@ const FormLayout = () => {
   );
 };
 
+// Profile页面布局组件
+const ProfileLayout = () => {
+  return (
+    <div className="profile-layout">
+      <Outlet />
+      <TabBar isAuthenticated={true} />
+    </div>
+  );
+};
+
 function App() {
   return (
     <AuthProvider>
@@ -96,6 +80,11 @@ function App() {
           {/* 带头部和底部的路由 */}
           <Route element={<MainLayout />}>
             <Route path="/" element={<ArticleListWrapper />} />
+          </Route>
+          
+          {/* Profile页面路由 */}
+          <Route element={<ProfileLayout />}>
+            <Route path="/profile" element={<Profile />} />
           </Route>
           
           {/* 不带头部和底部的路由 */}

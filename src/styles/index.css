@@ -4,5 +4,8 @@
 @import './layouts/footer.css';
 @import './pages/article.css';
 @import './pages/auth.css';
-@import './components/components.css';
+@import './components/tabbar.css';
+@import './components/profile.css';
+@import './components/custom-select.css';
+@import './components/confirm-dialog.css';
 @import './utils/utils.css';

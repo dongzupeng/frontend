@@ -43,7 +43,7 @@
 
 .search-box {
   position: relative;
-  width: 240px;
+  width: 320px;
 }
 
 .search-input {
@@ -140,7 +140,7 @@
   }
   
   .search-box {
-    width: 150px;
+    width: 200px;
   }
   
   .auth-menu {
@@ -164,6 +164,6 @@
   }
   
   .search-box {
-    width: 120px;
+    width: 150px;
   }
 }
