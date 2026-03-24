@@ -22,16 +22,11 @@ const Profile: React.FC = () => {
     setShowLogoutConfirm(false);
   };
 
-  if (!isAuthenticated || !user) {
-    return (
-      <div className="profile-container">
-        <div className="profile-not-logged-in">
-          <h2>请先登录</h2>
-          <p>登录后查看个人信息</p>
-        </div>
-      </div>
-    );
-  }
+  const handleMenuClick = () => {
+    if (!isAuthenticated) {
+      navigate('/login');
+    }
+  };
 
   return (
     <div className="profile-container">
@@ -40,59 +35,61 @@ const Profile: React.FC = () => {
           <img src="" alt="头像" />
         </div>
         <div className="profile-info">
-          <h2>{user.username}</h2>
-          <p>个人公众号</p>
+          <h2>{isAuthenticated && user ? user.username : '未登录'}</h2>
+          <p>{isAuthenticated && user ? '个人公众号' : '登录体验更多精彩'}</p>
         </div>
       </div>
       
       <div className="profile-stats">
-        <div className="stat-item">
-          <div className="stat-value">268</div>
+        <div className="stat-item" onClick={handleMenuClick} style={{ cursor: !isAuthenticated ? 'pointer' : 'default' }}>
+          <div className="stat-value">{isAuthenticated ? '268' : '-'}</div>
           <div className="stat-label">动态</div>
         </div>
-        <div className="stat-item">
-          <div className="stat-value">38</div>
+        <div className="stat-item" onClick={handleMenuClick} style={{ cursor: !isAuthenticated ? 'pointer' : 'default' }}>
+          <div className="stat-value">{isAuthenticated ? '38' : '-'}</div>
           <div className="stat-label">关注</div>
         </div>
-        <div className="stat-item">
-          <div className="stat-value">1830</div>
+        <div className="stat-item" onClick={handleMenuClick} style={{ cursor: !isAuthenticated ? 'pointer' : 'default' }}>
+          <div className="stat-value">{isAuthenticated ? '1830' : '-'}</div>
           <div className="stat-label">粉丝</div>
         </div>
       </div>
       
       <div className="profile-actions">
-        <div className="action-button green">
+        <div className="action-button green" onClick={handleMenuClick} style={{ cursor: !isAuthenticated ? 'pointer' : 'default' }}>
           <span className="action-icon">👥</span>
           <span className="action-label">我的活动</span>
         </div>
-        <div className="action-button yellow">
+        <div className="action-button yellow" onClick={handleMenuClick} style={{ cursor: !isAuthenticated ? 'pointer' : 'default' }}>
           <span className="action-icon">👪</span>
           <span className="action-label">多人群聊</span>
         </div>
       </div>
       
       <div className="profile-menu">
-        <div className="menu-item">
+        <div className="menu-item" onClick={handleMenuClick} style={{ cursor: !isAuthenticated ? 'pointer' : 'default' }}>
           <span className="menu-icon">📹</span>
           <span className="menu-label">我的视频</span>
         </div>
-        <div className="menu-item">
+        <div className="menu-item" onClick={handleMenuClick} style={{ cursor: !isAuthenticated ? 'pointer' : 'default' }}>
           <span className="menu-icon">⭐</span>
           <span className="menu-label">我的收藏</span>
         </div>
-        <div className="menu-item">
+        <div className="menu-item" onClick={handleMenuClick} style={{ cursor: !isAuthenticated ? 'pointer' : 'default' }}>
           <span className="menu-icon">💬</span>
           <span className="menu-label">我的话题</span>
         </div>
-        <div className="menu-item">
+        <div className="menu-item" onClick={handleMenuClick} style={{ cursor: !isAuthenticated ? 'pointer' : 'default' }}>
           <span className="menu-icon">🕐</span>
           <span className="menu-label">浏览历史</span>
         </div>
       </div>
       
-      <button className="logout-button" onClick={handleLogout}>
-        退出登录
-      </button>
+      {isAuthenticated && (
+        <button className="logout-button" onClick={handleLogout}>
+          退出登录
+        </button>
+      )}
       
       <ConfirmDialog
         isOpen={showLogoutConfirm}

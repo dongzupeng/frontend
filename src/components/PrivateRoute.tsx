@@ -1,6 +1,7 @@
 import React from 'react';
-import { Navigate, Outlet, useLocation } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import NotLoggedIn from './NotLoggedIn';
 
 const PrivateRoute: React.FC = () => {
   const { isAuthenticated, loading } = useAuth();
@@ -14,7 +15,7 @@ const PrivateRoute: React.FC = () => {
   return isAuthenticated ? (
     <Outlet />
   ) : (
-    <Navigate to="/login" state={{ from: location }} replace />
+    <NotLoggedIn from={location} />
   );
 };
 
