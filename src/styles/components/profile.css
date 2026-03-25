@@ -142,17 +142,22 @@
 
 .logout-button {
   width: 100%;
-  padding: 0.4rem 0.8rem;
+  height: 4rem;
+  padding: 16px;
   background-color: #ff4d4f;
   color: white;
   border: none;
-  border-radius: 20px;
-  font-size: 0.8rem;
+  border-radius: 2rem;
+  font-size: 16px;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 2px 4px rgba(51, 51, 51, 0.1);
   text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
 }
 
 .logout-button:hover {

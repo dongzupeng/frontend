@@ -57,6 +57,9 @@ export const articleApi = {
   update: (id: number, article: Partial<CreateArticleDto>): Promise<Article> => {
     return api.put(`/articles/${id}`, article).then((response) => response.data);
   },
+  incrementViews: (id: number): Promise<Article> => {
+    return api.post(`/articles/${id}/views`).then((response) => response.data);
+  },
   delete: (id: number): Promise<void> => {
     return api.delete(`/articles/${id}`).then(() => {});
   },

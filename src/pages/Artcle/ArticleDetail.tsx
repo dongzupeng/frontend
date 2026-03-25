@@ -25,7 +25,7 @@ const ArticleDetail: React.FC = () => {
         
         // 增加阅读量
         try {
-          await articleApi.update(parseInt(id), { views: (data.views || 0) + 1 } as any);
+          await articleApi.incrementViews(parseInt(id));
         } catch (err) {
           console.error('增加阅读量失败:', err);
         }
