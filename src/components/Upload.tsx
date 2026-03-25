@@ -55,7 +55,7 @@ const Upload: React.FC<UploadProps> = ({
   };
 
   // 处理裁剪
-  const onCropComplete = (croppedArea: any, croppedAreaPixels: any) => {
+  const onCropComplete = (_croppedArea: any, croppedAreaPixels: any) => {
     // 保存裁剪区域信息
     setCroppedAreaPixels(croppedAreaPixels);
   };
