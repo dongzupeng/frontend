@@ -22,9 +22,12 @@ const Profile: React.FC = () => {
     setShowLogoutConfirm(false);
   };
 
-  const handleMenuClick = () => {
+  const handleMenuClick = (menu: string) => {
     if (!isAuthenticated) {
       navigate('/login');
+    } else if (menu === 'profile') {
+      // 跳转到个人资料修改页面
+      navigate('/profile/edit');
     }
   };
 
@@ -32,30 +35,49 @@ const Profile: React.FC = () => {
     <div className="profile-container">
       <div className="profile-header">
         <div className="profile-avatar">
-          <img src="" alt="头像" />
+          {isAuthenticated && user ? (
+            user.avatar ? (
+              <img 
+                src={user.avatar} 
+                alt="头像" 
+                className="avatar-image" 
+                onClick={() => handleMenuClick('profile')} 
+                style={{ cursor: 'pointer' }}
+              />
+            ) : (
+              <div className="avatar-placeholder" onClick={() => handleMenuClick('profile')} style={{ cursor: 'pointer' }}>
+                <span className="avatar-icon">📷</span>
+                <span className="avatar-text">上传头像</span>
+              </div>
+            )
+          ) : (
+            <div className="avatar-placeholder">
+              <span className="avatar-icon">👤</span>
+            </div>
+          )}
         </div>
         <div className="profile-info">
           <h2>{isAuthenticated && user ? user.username : '未登录'}</h2>
-          <p>{isAuthenticated && user ? '个人公众号' : '登录体验更多精彩'}</p>
+          <p>{isAuthenticated && user ? user.bio : '登录体验更多精彩'}</p>
         </div>
       </div>
       
       <div className="profile-stats">
-        <div className="stat-item" onClick={handleMenuClick} style={{ cursor: !isAuthenticated ? 'pointer' : 'default' }}>
+        <div className="stat-item" onClick={() => handleMenuClick('activities')} style={{ cursor: !isAuthenticated ? 'pointer' : 'default' }}>
           <div className="stat-value">{isAuthenticated ? '268' : '-'}</div>
           <div className="stat-label">动态</div>
         </div>
-        <div className="stat-item" onClick={handleMenuClick} style={{ cursor: !isAuthenticated ? 'pointer' : 'default' }}>
+        <div className="stat-item" onClick={() => handleMenuClick('following')} style={{ cursor: !isAuthenticated ? 'pointer' : 'default' }}>
           <div className="stat-value">{isAuthenticated ? '38' : '-'}</div>
           <div className="stat-label">关注</div>
         </div>
-        <div className="stat-item" onClick={handleMenuClick} style={{ cursor: !isAuthenticated ? 'pointer' : 'default' }}>
+        <div className="stat-item" onClick={() => handleMenuClick('followers')} style={{ cursor: !isAuthenticated ? 'pointer' : 'default' }}>
           <div className="stat-value">{isAuthenticated ? '1830' : '-'}</div>
           <div className="stat-label">粉丝</div>
         </div>
       </div>
       
-      <div className="profile-actions">
+      {/* <div className="profile-actions">
         <div className="action-button green" onClick={handleMenuClick} style={{ cursor: !isAuthenticated ? 'pointer' : 'default' }}>
           <span className="action-icon">👥</span>
           <span className="action-label">我的活动</span>
@@ -64,22 +86,27 @@ const Profile: React.FC = () => {
           <span className="action-icon">👪</span>
           <span className="action-label">多人群聊</span>
         </div>
-      </div>
+      </div> */}
       
       <div className="profile-menu">
-        <div className="menu-item" onClick={handleMenuClick} style={{ cursor: !isAuthenticated ? 'pointer' : 'default' }}>
-          <span className="menu-icon">📹</span>
-          <span className="menu-label">我的视频</span>
+        {/* 个人资料修改 */}
+        <div className="menu-item" onClick={() => handleMenuClick('profile')} style={{ cursor: !isAuthenticated ? 'pointer' : 'default' }}>
+          <span className="menu-icon">👤</span>
+          <span className="menu-label">个人资料</span>
         </div>
-        <div className="menu-item" onClick={handleMenuClick} style={{ cursor: !isAuthenticated ? 'pointer' : 'default' }}>
+        <div className="menu-item" onClick={() => handleMenuClick('articles')} style={{ cursor: !isAuthenticated ? 'pointer' : 'default' }}>
+          <span className="menu-icon">📝</span>
+          <span className="menu-label">我的文章</span>
+        </div>
+        <div className="menu-item" onClick={() => handleMenuClick('favorites')} style={{ cursor: !isAuthenticated ? 'pointer' : 'default' }}>
           <span className="menu-icon">⭐</span>
           <span className="menu-label">我的收藏</span>
         </div>
-        <div className="menu-item" onClick={handleMenuClick} style={{ cursor: !isAuthenticated ? 'pointer' : 'default' }}>
-          <span className="menu-icon">💬</span>
-          <span className="menu-label">我的话题</span>
+        <div className="menu-item" onClick={() => handleMenuClick('likes')} style={{ cursor: !isAuthenticated ? 'pointer' : 'default' }}>
+          <span className="menu-icon">👍</span>
+          <span className="menu-label">我的点赞</span>
         </div>
-        <div className="menu-item" onClick={handleMenuClick} style={{ cursor: !isAuthenticated ? 'pointer' : 'default' }}>
+        <div className="menu-item" onClick={() => handleMenuClick('history')} style={{ cursor: !isAuthenticated ? 'pointer' : 'default' }}>
           <span className="menu-icon">🕐</span>
           <span className="menu-label">浏览历史</span>
         </div>

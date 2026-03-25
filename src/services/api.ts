@@ -74,9 +74,12 @@ export const authApi = {
     return api.post('/auth/register', userData).then((response) => response.data);
   },
   getCurrentUser: (): Promise<User> => {
-    return api.get('/auth/me').then((response) => response.data);
+    return api.get('/users/me').then((response) => response.data);
   },
   logout: (): Promise<void> => {
     return api.post('/auth/logout').then((response) => response.data);
+  },
+  updateUserInfo: (userData: Partial<User>): Promise<User> => {
+    return api.put('/users/updateUserInfo', userData).then((response) => response.data);
   },
 };

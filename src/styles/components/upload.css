@@ -153,3 +153,76 @@
   opacity: 0.7;
   cursor: not-allowed;
 }
+
+/* 裁剪功能样式 */
+.crop-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.crop-container {
+  background-color: white;
+  border-radius: 8px;
+  padding: 20px;
+  width: 90%;
+  max-width: 600px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.crop-container h3 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  color: #333;
+  text-align: center;
+}
+
+.crop-area {
+  width: 100%;
+  height: 400px;
+  margin-bottom: 20px;
+}
+
+.crop-controls {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.crop-button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.crop-button.cancel {
+  background-color: #f5f5f5;
+  color: #333;
+}
+
+.crop-button.confirm {
+  background-color: #1890ff;
+  color: white;
+}
+
+.crop-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.crop-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}

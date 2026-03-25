@@ -7,6 +7,7 @@ import ArticleForm from './pages/Artcle/ArticleForm.tsx'
 import Login from './pages/Auth/Login.tsx'
 import Register from './pages/Auth/Register.tsx'
 import Profile from './pages/Profile/Profile.tsx'
+import ProfileEdit from './pages/Profile/ProfileEdit.tsx'
 import PrivateRoute from './components/PrivateRoute.tsx'
 import TabBar from './components/TabBar.tsx'
 import { AuthProvider, useAuth } from './contexts/AuthContext.tsx'
@@ -93,6 +94,7 @@ function App() {
             <Route element={<PrivateRoute />}>
               <Route path="/create" element={<ArticleForm />} />
               <Route path="/edit/:id" element={<EditArticlePage />} />
+              <Route path="/profile/edit" element={<ProfileEdit />} />
             </Route>
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />

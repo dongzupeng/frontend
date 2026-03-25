@@ -8,6 +8,7 @@ interface AuthContextType {
   error: string | null;
   login: (username: string, password: string) => Promise<void>;
   logout: () => void;
+  updateUserInfo: (userData: Partial<User>) => Promise<void>;
   isAuthenticated: boolean;
 }
 
@@ -37,9 +38,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             setUser(JSON.parse(userData));
           } else {
             // 如果有token但没有用户信息，尝试从服务器获取
-            const response = await authApi.getCurrentUser();
-            setUser(response);
-            localStorage.setItem('user', JSON.stringify(response));
+            try {
+              const response = await authApi.getCurrentUser();
+              setUser(response);
+              localStorage.setItem('user', JSON.stringify(response));
+            } catch (apiErr: any) {
+              // 如果API调用失败（如401），清除token
+              if (apiErr.response?.status === 401) {
+                console.error('Token expired or invalid, clearing...');
+                localStorage.removeItem('token');
+                localStorage.removeItem('user');
+              } else {
+                throw apiErr;
+              }
+            }
           }
         }
       } catch (err) {
@@ -85,12 +97,29 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
+  const updateUserInfo = async (userData: Partial<User>) => {
+    try {
+      setLoading(true);
+      setError(null);
+      // 调用后端更新用户接口
+      const updatedUser = await authApi.updateUserInfo(userData);
+      setUser(updatedUser);
+      localStorage.setItem('user', JSON.stringify(updatedUser));
+    } catch (err: any) {
+      setError(err.response?.data?.message || '更新个人资料失败');
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const value = {
     user,
     loading,
     error,
     login,
     logout,
+    updateUserInfo,
     isAuthenticated: !!user,
   };
 
