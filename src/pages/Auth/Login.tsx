@@ -10,7 +10,6 @@ const Login: React.FC = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const [agreed, setAgreed] = useState(true);
 
   // 从location.state中获取之前尝试访问的页面
   const from = location.state?.from?.pathname || '/';
