@@ -8,6 +8,10 @@ import Login from './pages/Auth/Login.tsx'
 import Register from './pages/Auth/Register.tsx'
 import Profile from './pages/Profile/Profile.tsx'
 import ProfileEdit from './pages/Profile/ProfileEdit.tsx'
+import UserArticles from './pages/Profile/UserArticles.tsx'
+import UserFavorites from './pages/Profile/UserFavorites.tsx'
+import UserLikes from './pages/Profile/UserLikes.tsx'
+import UserHistory from './pages/Profile/UserHistory.tsx'
 import PrivateRoute from './components/PrivateRoute.tsx'
 import TabBar from './components/TabBar.tsx'
 import { AuthProvider, useAuth } from './contexts/AuthContext.tsx'
@@ -95,6 +99,10 @@ function App() {
               <Route path="/create" element={<ArticleForm />} />
               <Route path="/edit/:id" element={<EditArticlePage />} />
               <Route path="/profile/edit" element={<ProfileEdit />} />
+              <Route path="/profile/articles" element={<UserArticles />} />
+              <Route path="/profile/favorites" element={<UserFavorites />} />
+              <Route path="/profile/likes" element={<UserLikes />} />
+              <Route path="/profile/history" element={<UserHistory />} />
             </Route>
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />

@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { articleApi } from '../../services/api';
+import { useAuth } from '../../contexts/AuthContext';
 import type { Article } from '../../types/index';
 
 const ArticleDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [article, setArticle] = useState<Article | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -31,6 +33,27 @@ const ArticleDetail: React.FC = () => {
         } catch (err) {
           console.error('增加阅读量失败:', err);
         }
+        
+        // 记录浏览历史
+        if (user) {
+          try {
+            await articleApi.addHistory(parseInt(id));
+          } catch (err) {
+            console.error('记录浏览历史失败:', err);
+          }
+        }
+        
+        // 从后端获取点赞和收藏状态
+        if (user) {
+          try {
+            const likeStatus = await articleApi.checkLike(parseInt(id));
+            const favoriteStatus = await articleApi.checkFavorite(parseInt(id));
+            setIsLiked(likeStatus.isLiked);
+            setIsFavorited(favoriteStatus.isFavorited);
+          } catch (err) {
+            console.error('获取点赞收藏状态失败:', err);
+          }
+        }
       } catch (err) {
         setError('加载文章失败');
       } finally {
@@ -39,7 +62,7 @@ const ArticleDetail: React.FC = () => {
     };
 
     fetchArticle();
-  }, [id]);
+  }, [id, user]);
 
   if (loading) {
     return (
@@ -52,10 +75,10 @@ const ArticleDetail: React.FC = () => {
 
   // 处理点赞
   const handleLike = async () => {
-    if (!id) return;
+    if (!id || !user) return;
     
     try {
-      const updatedArticle = await articleApi.toggleLikes(parseInt(id), isLiked);
+      const updatedArticle = await articleApi.toggleLike(parseInt(id));
       setArticle(updatedArticle);
       setIsLiked(!isLiked);
     } catch (err) {
@@ -65,10 +88,10 @@ const ArticleDetail: React.FC = () => {
 
   // 处理收藏
   const handleFavorite = async () => {
-    if (!id) return;
+    if (!id || !user) return;
     
     try {
-      const updatedArticle = await articleApi.toggleFavorites(parseInt(id), isFavorited);
+      const updatedArticle = await articleApi.toggleFavorite(parseInt(id));
       setArticle(updatedArticle);
       setIsFavorited(!isFavorited);
     } catch (err) {
@@ -123,7 +146,7 @@ const ArticleDetail: React.FC = () => {
             onClick={handleFavorite}
             title={isFavorited ? '取消收藏' : '收藏'}
           >
-            {isFavorited ? '⭐' : '⭐'}
+            {isFavorited ? '⭐' : '☆'}
             <span className="action-count">{article.favorites}</span>
           </button>
         </div>

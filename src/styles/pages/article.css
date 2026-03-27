@@ -386,12 +386,13 @@
   width: 80px !important;
   height: 80px !important;
   border-radius: 50% !important;
-  background-color: #f0f0f0 !important;
+  background-color: #ffffff !important;
   color: #666666 !important;
   padding: 0 !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
+  box-shadow: 0 1px 3px rgba(51, 51, 51, 0.1) !important;
 }
 
 .article-detail .article-actions .action-button.back-button:hover {

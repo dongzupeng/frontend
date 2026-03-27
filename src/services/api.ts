@@ -67,12 +67,37 @@ export const articleApi = {
       return response.data;
     });
   },
-  toggleFavorites: (id: number, isFavorited: boolean): Promise<Article> => {
-    console.log('Calling toggleFavorites with isFavorited:', isFavorited, 'type:', typeof isFavorited);
-    return api.post(`/articles/${id}/favorites`, { isFavorited }).then((response) => {
-      console.log('toggleFavorites response:', response.data);
-      return response.data;
-    });
+  // 点赞相关API
+  toggleLike: (articleId: number): Promise<Article> => {
+    return api.post(`/likes/${articleId}`).then((response) => response.data);
+  },
+  getUserLikes: (): Promise<any[]> => {
+    return api.get('/likes').then((response) => response.data);
+  },
+  checkLike: (articleId: number): Promise<{ isLiked: boolean }> => {
+    return api.get(`/likes/${articleId}/check`).then((response) => response.data);
+  },
+  
+  // 收藏相关API
+  toggleFavorite: (articleId: number): Promise<Article> => {
+    return api.post(`/favorites/${articleId}`).then((response) => response.data);
+  },
+  getUserFavorites: (): Promise<any[]> => {
+    return api.get('/favorites').then((response) => response.data);
+  },
+  checkFavorite: (articleId: number): Promise<{ isFavorited: boolean }> => {
+    return api.get(`/favorites/${articleId}/check`).then((response) => response.data);
+  },
+  
+  // 浏览历史相关API
+  addHistory: (articleId: number): Promise<any> => {
+    return api.post(`/history/${articleId}`).then((response) => response.data);
+  },
+  getUserHistory: (limit?: number): Promise<any[]> => {
+    return api.get(`/history${limit ? `?limit=${limit}` : ''}`).then((response) => response.data);
+  },
+  clearHistory: (): Promise<void> => {
+    return api.delete('/history').then(() => {});
   },
   delete: (id: number): Promise<void> => {
     return api.delete(`/articles/${id}`).then(() => {});

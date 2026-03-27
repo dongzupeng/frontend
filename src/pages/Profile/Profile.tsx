@@ -25,9 +25,27 @@ const Profile: React.FC = () => {
   const handleMenuClick = (menu: string) => {
     if (!isAuthenticated) {
       navigate('/login');
-    } else if (menu === 'profile') {
-      // 跳转到个人资料修改页面
-      navigate('/profile/edit');
+      return;
+    }
+    
+    switch (menu) {
+      case 'profile':
+        navigate('/profile/edit');
+        break;
+      case 'articles':
+        navigate('/profile/articles');
+        break;
+      case 'favorites':
+        navigate('/profile/favorites');
+        break;
+      case 'likes':
+        navigate('/profile/likes');
+        break;
+      case 'history':
+        navigate('/profile/history');
+        break;
+      default:
+        break;
     }
   };
 
