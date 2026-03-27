@@ -60,6 +60,20 @@ export const articleApi = {
   incrementViews: (id: number): Promise<Article> => {
     return api.post(`/articles/${id}/views`).then((response) => response.data);
   },
+  toggleLikes: (id: number, isLiked: boolean): Promise<Article> => {
+    console.log('Calling toggleLikes with isLiked:', isLiked, 'type:', typeof isLiked);
+    return api.post(`/articles/${id}/likes`, { isLiked }).then((response) => {
+      console.log('toggleLikes response:', response.data);
+      return response.data;
+    });
+  },
+  toggleFavorites: (id: number, isFavorited: boolean): Promise<Article> => {
+    console.log('Calling toggleFavorites with isFavorited:', isFavorited, 'type:', typeof isFavorited);
+    return api.post(`/articles/${id}/favorites`, { isFavorited }).then((response) => {
+      console.log('toggleFavorites response:', response.data);
+      return response.data;
+    });
+  },
   delete: (id: number): Promise<void> => {
     return api.delete(`/articles/${id}`).then(() => {});
   },

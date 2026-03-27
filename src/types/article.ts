@@ -7,6 +7,8 @@ export interface Article {
   coverImage: string;
   isPublished: boolean;
   views: number;
+  likes: number;
+  favorites: number;
   createdAt: string;
   updatedAt: string;
 }

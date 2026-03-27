@@ -9,6 +9,8 @@ const ArticleDetail: React.FC = () => {
   const [article, setArticle] = useState<Article | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [isLiked, setIsLiked] = useState<boolean>(false);
+  const [isFavorited, setIsFavorited] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchArticle = async () => {
@@ -48,6 +50,32 @@ const ArticleDetail: React.FC = () => {
     );
   }
 
+  // 处理点赞
+  const handleLike = async () => {
+    if (!id) return;
+    
+    try {
+      const updatedArticle = await articleApi.toggleLikes(parseInt(id), isLiked);
+      setArticle(updatedArticle);
+      setIsLiked(!isLiked);
+    } catch (err) {
+      console.error('操作失败:', err);
+    }
+  };
+
+  // 处理收藏
+  const handleFavorite = async () => {
+    if (!id) return;
+    
+    try {
+      const updatedArticle = await articleApi.toggleFavorites(parseInt(id), isFavorited);
+      setArticle(updatedArticle);
+      setIsFavorited(!isFavorited);
+    } catch (err) {
+      console.error('操作失败:', err);
+    }
+  };
+
   if (error || !article) {
     return (
       <div className="empty-state">
@@ -78,9 +106,27 @@ const ArticleDetail: React.FC = () => {
         <p>{article.content}</p>
       </div>
       <div className="article-actions">
-        <button className="action-button back-button" onClick={() => navigate('/')}>
-          返回列表
+        <button onClick={() => navigate('/')}>
+          ←
         </button>
+        <div className="action-buttons-container">
+          <button 
+            className={`action-button like-button ${isLiked ? 'active' : ''}`}
+            onClick={handleLike}
+            title={isLiked ? '取消点赞' : '点赞'}
+          >
+            {isLiked ? '👍' : '👍'}
+            <span className="action-count">{article.likes}</span>
+          </button>
+          <button 
+            className={`action-button favorite-button ${isFavorited ? 'active' : ''}`}
+            onClick={handleFavorite}
+            title={isFavorited ? '取消收藏' : '收藏'}
+          >
+            {isFavorited ? '⭐' : '⭐'}
+            <span className="action-count">{article.favorites}</span>
+          </button>
+        </div>
       </div>
     </div>
   );
