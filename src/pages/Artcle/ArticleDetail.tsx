@@ -66,9 +66,9 @@ const ArticleDetail: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="loading-state">
-        <div className="loading-spinner"></div>
-        <p>加载中...</p>
+      <div className="flex flex-col items-center justify-center py-16">
+        <div className="w-10 h-10 border-4 border-gray-200 border-t-primary rounded-full animate-spin"></div>
+        <p className="mt-4 text-gray-600">加载中...</p>
       </div>
     );
   }
@@ -101,53 +101,60 @@ const ArticleDetail: React.FC = () => {
 
   if (error || !article) {
     return (
-      <div className="empty-state">
-        <div className="empty-icon">⚠️</div>
-        <h3>加载失败</h3>
-        <p>{error || '文章不存在'}</p>
-        <button className="retry-button" onClick={() => navigate('/')}>返回列表</button>
+      <div className="flex flex-col items-center justify-center py-16">
+        <div className="text-4xl mb-4">⚠️</div>
+        <h3 className="text-xl font-semibold text-gray-800 mb-2">加载失败</h3>
+        <p className="text-gray-600 mb-6">{error || '文章不存在'}</p>
+        <button className="px-8 py-3 bg-gray-100 text-gray-800 rounded-full font-medium transition-all duration-300 hover:bg-gray-200 hover:shadow-md" onClick={() => navigate('/')}>返回列表</button>
       </div>
     );
   }
 
   return (
-    <div className="article-detail">
-      <div className="article-header">
-        <h1 className="article-title">{article.title}</h1>
-        <div className="article-meta">
-          <span className="article-author">作者：{article.author}</span>
-          <span className="article-date">发布时间：{new Date(article.createdAt).toLocaleString()}</span>
-          <span className="article-views">阅读 {article.views}</span>
+    <div className="max-w-4xl mx-auto px-4 py-8">
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold text-gray-800 mb-4">{article.title}</h1>
+        <div className="flex flex-wrap gap-4 text-sm text-gray-600">
+          <span className="font-medium">作者：{article.author}</span>
+          <span>发布时间：{new Date(article.createdAt).toLocaleString()}</span>
+          <span className="flex items-center gap-1">阅读 {article.views}</span>
         </div>
       </div>
       {article.coverImage && (
-        <div className="article-cover">
-          <img src={article.coverImage || undefined} alt={article.title} />
+        <div className="mb-8 rounded-lg overflow-hidden shadow-sm">
+          <img src={article.coverImage} alt={article.title} className="w-full h-auto max-h-[400px] object-cover" />
         </div>
       )}
-      <div className="article-content">
+      <div className="mb-12 text-gray-700 leading-relaxed">
         <p>{article.content}</p>
       </div>
-      <div className="article-actions">
-        <button onClick={() => navigate('/')}>
+      <div className="flex items-center justify-between gap-4 flex-wrap sm:flex-nowrap justify-center sm:justify-between">
+        <button 
+          className="w-16 h-16 rounded-full bg-white shadow-sm flex items-center justify-center text-gray-600 hover:bg-gray-50 transition-all duration-300"
+          onClick={() => navigate('/')}
+        >
           ←
         </button>
-        <div className="action-buttons-container">
+        <div className="flex gap-4">
           <button 
-            className={`action-button like-button ${isLiked ? 'active' : ''}`}
+            className={`relative w-16 h-16 rounded-full bg-white shadow-sm flex items-center justify-center text-2xl hover:bg-gray-50 transition-all duration-300 ${isLiked ? 'text-primary' : 'text-gray-600'}`}
             onClick={handleLike}
             title={isLiked ? '取消点赞' : '点赞'}
           >
-            {isLiked ? '👍' : '👍'}
-            <span className="action-count">{article.likes}</span>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+            <span className={`absolute top-1 right-1 min-w-5 h-5 px-1.5 rounded-full text-white text-xs font-semibold flex items-center justify-center ${isLiked ? 'bg-primary' : 'bg-gray-400'}`}>{article.likes}</span>
           </button>
           <button 
-            className={`action-button favorite-button ${isFavorited ? 'active' : ''}`}
+            className={`relative w-16 h-16 rounded-full bg-white shadow-sm flex items-center justify-center text-2xl hover:bg-gray-50 transition-all duration-300 ${isFavorited ? 'text-yellow-500' : 'text-gray-600'}`}
             onClick={handleFavorite}
             title={isFavorited ? '取消收藏' : '收藏'}
           >
-            {isFavorited ? '⭐' : '☆'}
-            <span className="action-count">{article.favorites}</span>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill={isFavorited ? 'currentColor' : 'none'} xmlns="http://www.w3.org/2000/svg">
+              <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+            <span className={`absolute top-1 right-1 min-w-5 h-5 px-1.5 rounded-full text-white text-xs font-semibold flex items-center justify-center ${isFavorited ? 'bg-yellow-500' : 'bg-gray-400'}`}>{article.favorites}</span>
           </button>
         </div>
       </div>

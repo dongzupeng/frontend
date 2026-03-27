@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { articleApi } from '../../services/api';
 import type { Article } from '../../types/index';
-import ConfirmDialog from '../../components/ConfirmDialog';
+
 import CustomSelect from '../../components/CustomSelect';
 
 interface ArticleListProps {
@@ -15,13 +15,6 @@ const ArticleList: React.FC<ArticleListProps> = ({ searchTerm }) => {
   const [filteredArticles, setFilteredArticles] = useState<Article[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [confirmDialog, setConfirmDialog] = useState<{
-    isOpen: boolean;
-    articleId: number | null;
-  }>({
-    isOpen: false,
-    articleId: null,
-  });
   const [sortBy, setSortBy] = useState<'createdAt' | 'views'>('createdAt');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -80,13 +73,13 @@ const ArticleList: React.FC<ArticleListProps> = ({ searchTerm }) => {
 
   if (error) {
     return (
-      <div className="article-list">
-        <h2>文章列表</h2>
-        <div className="empty-state">
-          <div className="empty-icon">⚠️</div>
-          <h3>加载失败</h3>
-          <p>{error}</p>
-          <button className="retry-button" onClick={() => window.location.reload()}>重试</button>
+      <div className="py-8">
+        <h2 className="text-2xl font-bold text-gray-800 mb-6 text-left">文章列表</h2>
+        <div className="flex flex-col items-center justify-center py-16">
+          <div className="text-4xl mb-4">⚠️</div>
+          <h3 className="text-xl font-semibold text-gray-800 mb-2">加载失败</h3>
+          <p className="text-gray-600 mb-6">{error}</p>
+          <button className="px-8 py-3 bg-gray-100 text-gray-800 rounded-full font-medium transition-all duration-300 hover:bg-gray-200 hover:shadow-md">重试</button>
         </div>
       </div>
     );
@@ -101,11 +94,11 @@ const ArticleList: React.FC<ArticleListProps> = ({ searchTerm }) => {
   const totalPages = Math.ceil(filteredArticles.length / itemsPerPage);
 
   return (
-    <div className="article-list">
-      <div className="article-list-header">
-        <div className="header-left">
-          <h2>文章列表</h2>
-          <div className="sort-controls">
+    <div className="py-8">
+      <div className="mb-6 pb-4 border-b border-gray-200">
+        <div className="flex flex-col gap-4">
+          <h2 className="text-2xl font-bold text-gray-800 text-left">文章列表</h2>
+          <div className="flex items-center gap-2">
             <CustomSelect
               options={[
                 { value: 'createdAt', label: '按发布时间' },
@@ -113,10 +106,9 @@ const ArticleList: React.FC<ArticleListProps> = ({ searchTerm }) => {
               ]}
               value={sortBy}
               onChange={(value) => setSortBy(value as 'createdAt' | 'views')}
-              className="sort-select"
             />
             <button 
-              className="sort-button"
+              className="px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-700 hover:bg-gray-50 hover:border-primary transition-all duration-300"
               onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
             >
               {sortOrder === 'asc' ? '↑' : '↓'}
@@ -125,54 +117,34 @@ const ArticleList: React.FC<ArticleListProps> = ({ searchTerm }) => {
         </div>
       </div>
       {filteredArticles.length === 0 ? (
-        <div className="empty-state">
-          <div className="empty-icon">📝</div>
-          <h3>暂无文章</h3>
-          <p>还没有发布任何文章</p>
+        <div className="flex flex-col items-center justify-center py-16">
+          <div className="text-4xl mb-4">📝</div>
+          <h3 className="text-xl font-semibold text-gray-800 mb-2">暂无文章</h3>
+          <p className="text-gray-600">还没有发布任何文章</p>
         </div>
       ) : (
-        <div className="article-list-content">
-          <div className="articles">
+        <div className="space-y-6">
+          <div className="space-y-6">
             {currentArticles.map((article) => (
-              <div key={article.id} className="article-card">
+              <div key={article.id} className="bg-white rounded-lg shadow-sm hover:shadow-md transition-all duration-300">
                 <div 
-                  className="article-card-content"
+                  className="p-4 cursor-pointer"
                   onClick={() => navigate(`/article/${article.id}`)}
-                  style={{ cursor: 'pointer' }}
                 >
-                  <div className="article-image">
-                    <img src={article.coverImage || undefined} alt={article.title} />
-                  </div>
-                  <div className="article-content">
-                    <h3 className="article-title">{article.title}</h3>
-                    <div className="article-meta">
-                      <div className="article-meta-left">
-                        <span className="article-author">{article.author}</span>
-                        <span className="article-date">{new Date(article.createdAt).toLocaleDateString()}</span>
-                        <span className="article-views">阅读 {article.views}</span>
-                      </div>
-                      <div className="article-meta-right">
-                        <button 
-                          className="action-button edit-button"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            navigate(`/edit/${article.id}`);
-                          }}
-                        >
-                          编辑
-                        </button>
-                        <button 
-                          className="action-button delete-button"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setConfirmDialog({
-                              isOpen: true,
-                              articleId: article.id,
-                            });
-                          }}
-                        >
-                          删除
-                        </button>
+                  {article.coverImage && (
+                    <div className="w-full h-48 rounded-lg overflow-hidden mb-4">
+                      <img src={article.coverImage} alt={article.title} className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
+                    </div>
+                  )}
+                  <div>
+                    <h3 className="text-xl font-semibold text-gray-800 mb-4 hover:text-primary transition-colors duration-300">{article.title}</h3>
+                    <div className="flex flex-wrap items-center gap-4 pt-4 border-t border-gray-100">
+                      <div className="flex flex-wrap items-center gap-4">
+                        <span className="text-sm text-gray-600 font-medium">{article.author}</span>
+                        <span className="text-sm text-gray-500">{new Date(article.createdAt).toLocaleDateString()}</span>
+                        <span className="text-sm text-gray-500 flex items-center gap-1">
+                          👁️ {article.views}
+                        </span>
                       </div>
                     </div>
                   </div>
@@ -181,19 +153,19 @@ const ArticleList: React.FC<ArticleListProps> = ({ searchTerm }) => {
             ))}
           </div>
           {totalPages > 1 && (
-            <div className="pagination">
+            <div className="flex items-center justify-center gap-4 pt-6 border-t border-gray-200">
               <button 
-                className="pagination-button"
+                className="px-4 py-2 border border-gray-300 rounded-lg bg-white text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300"
                 onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
                 disabled={currentPage === 1}
               >
                 上一页
               </button>
-              <div className="pagination-info">
+              <div className="text-sm text-gray-600 font-medium">
                 第 {currentPage} / {totalPages} 页
               </div>
               <button 
-                className="pagination-button"
+                className="px-4 py-2 border border-gray-300 rounded-lg bg-white text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300"
                 onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
                 disabled={currentPage === totalPages}
               >
@@ -203,41 +175,7 @@ const ArticleList: React.FC<ArticleListProps> = ({ searchTerm }) => {
           )}
         </div>
       )}
-      <ConfirmDialog
-        isOpen={confirmDialog.isOpen}
-        title="确认删除"
-        message="确定要删除这篇文章吗？此操作不可撤销。"
-        onConfirm={() => {
-          if (confirmDialog.articleId) {
-            articleApi.delete(confirmDialog.articleId)
-              .then(() => {
-                // 重新获取文章列表
-                fetchArticles();
-                // 关闭确认对话框
-                setConfirmDialog({
-                  isOpen: false,
-                  articleId: null,
-                });
-              })
-              .catch((err) => {
-                console.error('删除文章失败:', err);
-                // 关闭确认对话框
-                setConfirmDialog({
-                  isOpen: false,
-                  articleId: null,
-                });
-                // 显示错误提示
-                alert('删除文章失败，请重试');
-              });
-          }
-        }}
-        onCancel={() => {
-          setConfirmDialog({
-            isOpen: false,
-            articleId: null,
-          });
-        }}
-      />
+
     </div>
   );
 };

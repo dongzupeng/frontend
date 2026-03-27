@@ -49,24 +49,24 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
   };
 
   return (
-    <div className={`custom-select ${className}`} ref={selectRef}>
+    <div className={`relative inline-block min-w-[140px] ${className}`} ref={selectRef}>
       <div
-        className="custom-select-trigger"
+        className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 bg-white shadow-sm hover:border-primary hover:bg-gray-50 transition-all duration-300 cursor-pointer flex items-center justify-between gap-2 h-9"
         onClick={() => setIsOpen(!isOpen)}
       >
-        <span className="custom-select-value">
+        <span className="flex-1 whitespace-nowrap overflow-hidden text-ellipsis">
           {selectedOption ? selectedOption.label : placeholder}
         </span>
-        <span className={`custom-select-arrow ${isOpen ? 'open' : ''}`}>
+        <span className={`text-xs text-gray-500 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}>
           ▼
         </span>
       </div>
       {isOpen && (
-        <div className="custom-select-options">
+        <div className="absolute top-full left-0 right-0 mt-1 border border-gray-300 rounded-lg bg-white shadow-md z-50 overflow-hidden max-h-[200px] overflow-y-auto">
           {options.map((option) => (
             <div
               key={option.value}
-              className={`custom-select-option ${option.value === value ? 'selected' : ''}`}
+              className={`px-4 py-3 text-gray-700 cursor-pointer transition-all duration-200 ${option.value === value ? 'bg-blue-50 text-blue-500' : 'hover:bg-gray-50'}`}
               onClick={() => handleOptionClick(option)}
             >
               {option.label}

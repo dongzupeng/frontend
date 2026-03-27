@@ -175,7 +175,7 @@ const Upload: React.FC<UploadProps> = ({
   };
 
   return (
-    <div className="upload-component">
+    <div className="space-y-4">
       <input
         type="text"
         value={value}
@@ -185,33 +185,35 @@ const Upload: React.FC<UploadProps> = ({
         }}
         placeholder={placeholder}
         disabled={disabled}
-        className="upload-input"
+        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-600 bg-transparent placeholder-gray-400"
       />
-      <div className="upload-container">
+      <div className="flex flex-wrap items-center gap-4">
         <input
           type="file"
           accept={accept}
           onChange={handleImageUpload}
           disabled={uploading || disabled}
-          style={{ display: 'none' }}
+          className="hidden"
           id="file-upload"
         />
-        <label htmlFor="file-upload" className="upload-button">
-          {uploading ? '上传中...' : (
-            <div className="upload-content">
-              <div className="upload-icon">+</div>
-              <div className="upload-text">Upload</div>
+        <label htmlFor="file-upload" className="flex items-center justify-center w-24 h-24 border-2 border-dashed border-gray-300 rounded-lg hover:border-blue-500 transition-all duration-300 cursor-pointer bg-gray-50">
+          {uploading ? (
+            <span className="text-gray-600">上传中...</span>
+          ) : (
+            <div className="flex flex-col items-center justify-center">
+              <div className="text-2xl text-gray-400">+</div>
+              <div className="text-sm text-gray-500 mt-1">Upload</div>
             </div>
           )}
         </label>
-        <span className="upload-hint">（图片大小不超过5MB）</span>
+        <span className="text-sm text-gray-500">（图片大小不超过5MB）</span>
       </div>
       {imagePreview && (
-        <div className="upload-preview">
-          <img src={imagePreview} alt="预览" />
+        <div className="flex items-center gap-4">
+          <img src={imagePreview} alt="预览" className="w-24 h-24 object-cover rounded-lg" />
           <button
             type="button"
-            className="remove-button"
+            className="px-4 py-2 bg-gray-100 text-gray-800 rounded-lg hover:bg-gray-200 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
             onClick={handleRemoveImage}
             disabled={disabled}
           >
@@ -221,10 +223,10 @@ const Upload: React.FC<UploadProps> = ({
       )}
       
       {cropping && cropImage && (
-        <div className="crop-modal" style={{ zIndex: 1000, position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0, 0, 0, 0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <div className="crop-container" style={{ position: 'relative', zIndex: 1001, backgroundColor: 'white', borderRadius: '8px', padding: '20px', width: '90%', maxWidth: '400px', boxShadow: '0 4px 20px rgba(0, 0, 0, 0.15)' }}>
-            <h3 style={{ margin: '0 0 15px 0', color: '#333', textAlign: 'center', fontSize: '16px' }}>裁剪图片</h3>
-            <div className="crop-area" style={{ width: '100%', height: '250px', marginBottom: '15px', position: 'relative' }}>
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 w-[90%] max-w-md shadow-lg">
+            <h3 className="text-lg font-medium text-gray-800 mb-4 text-center">裁剪图片</h3>
+            <div className="w-full h-64 mb-4 relative">
               <Cropper
                 image={cropImage}
                 crop={crop}
@@ -235,21 +237,19 @@ const Upload: React.FC<UploadProps> = ({
                 onCropComplete={onCropComplete}
               />
             </div>
-            <div className="crop-controls" style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px', marginTop: '0' }}>
+            <div className="flex gap-3 justify-end">
               <button
                 type="button"
-                className="crop-button cancel"
+                className="px-4 py-2 bg-gray-100 text-gray-800 rounded-lg hover:bg-gray-200 transition-all duration-300"
                 onClick={handleCropCancel}
-                style={{ padding: '8px 16px', backgroundColor: '#f5f5f5', color: '#333', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '14px' }}
               >
                 取消
               </button>
               <button
                 type="button"
-                className="crop-button confirm"
+                className="px-4 py-2 bg-blue-100 text-blue-800 rounded-lg hover:bg-blue-200 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                 onClick={handleCropConfirm}
                 disabled={uploading}
-                style={{ padding: '8px 16px', backgroundColor: '#1890ff', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '14px' }}
               >
                 {uploading ? '处理中...' : '确认'}
               </button>
