@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, Link, useParams, Outlet, useOutletContext, useNavigate } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, Link, useParams, Outlet, useOutletContext } from 'react-router-dom'
 import ArticleList from './pages/Artcle/ArticleListNew.tsx'
 import ArticleDetail from './pages/Artcle/ArticleDetail.tsx'
 import ArticleForm from './pages/Artcle/ArticleForm.tsx'
@@ -55,7 +55,7 @@ const MainLayout = () => {
           </div>
         </div>
       </header>
-      <main className="max-w-4xl mx-auto px-4 py-6 flex-1">
+      <main className="max-w-4xl px-4 py-6 flex-1">
         <Outlet context={{ searchTerm }} />
       </main>
       <TabBar isAuthenticated={isAuthenticated} />

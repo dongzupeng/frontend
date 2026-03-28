@@ -89,7 +89,7 @@ const ProfileEdit: React.FC = () => {
               onChange={(e) => setUsername(e.target.value)}
               placeholder="请输入用户名"
               required
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-600 bg-transparent placeholder-gray-400"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-gray-600 bg-transparent placeholder-gray-400"
             />
           </div>
           <div className="mb-6">
@@ -100,7 +100,7 @@ const ProfileEdit: React.FC = () => {
               onChange={(e) => setBio(e.target.value)}
               placeholder="请输入个人简介"
               rows={4}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-vertical text-gray-600 bg-transparent placeholder-gray-400"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent resize-vertical text-gray-600 bg-transparent placeholder-gray-400"
             />
           </div>
 
@@ -114,7 +114,7 @@ const ProfileEdit: React.FC = () => {
             </button>
             <button 
               type="submit" 
-              className="px-6 py-3 bg-blue-100 text-blue-800 rounded-lg font-medium transition-all duration-300 hover:bg-blue-200 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-6 py-3 bg-primary/10 text-primary rounded-lg font-medium transition-all duration-300 hover:bg-primary/20 disabled:opacity-50 disabled:cursor-not-allowed"
               disabled={loading}
             >
               {loading ? '处理中...' : '更新资料'}

@@ -144,7 +144,7 @@ const ArticleDetail: React.FC = () => {
       <div className="mb-12 text-gray-700 leading-relaxed">
         <p>{article.content}</p>
       </div>
-      <div className="flex items-center justify-between gap-4 flex-wrap sm:flex-nowrap justify-center sm:justify-between">
+      <div className="flex items-center justify-between gap-4 flex-wrap sm:flex-nowrap sm:justify-between">
         <button 
           className="w-16 h-16 rounded-full bg-white shadow-sm flex items-center justify-center text-gray-600 hover:bg-gray-50 transition-all duration-300"
           onClick={() => navigate('/')}

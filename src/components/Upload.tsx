@@ -185,7 +185,7 @@ const Upload: React.FC<UploadProps> = ({
         }}
         placeholder={placeholder}
         disabled={disabled}
-        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-600 bg-transparent placeholder-gray-400"
+        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-gray-600 bg-transparent placeholder-gray-400"
       />
       <div className="flex flex-wrap items-center gap-4">
         <input
@@ -196,7 +196,7 @@ const Upload: React.FC<UploadProps> = ({
           className="hidden"
           id="file-upload"
         />
-        <label htmlFor="file-upload" className="flex items-center justify-center w-24 h-24 border-2 border-dashed border-gray-300 rounded-lg hover:border-blue-500 transition-all duration-300 cursor-pointer bg-gray-50">
+        <label htmlFor="file-upload" className="flex items-center justify-center w-24 h-24 border-2 border-dashed border-gray-300 rounded-lg hover:border-primary transition-all duration-300 cursor-pointer bg-gray-50">
           {uploading ? (
             <span className="text-gray-600">上传中...</span>
           ) : (
