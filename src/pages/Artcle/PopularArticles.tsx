@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import type { Article } from '../types/index';
+import type { Article } from '../../types/index';
 
 interface PopularArticlesProps {
   articles: Article[];

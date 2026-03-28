@@ -4,8 +4,8 @@ import { articleApi } from '../../services/api';
 import type { Article } from '../../types/index';
 import ConfirmDialog from '../../components/ConfirmDialog';
 import ArticleCard from '../../components/ArticleCard';
-import RecommendedArticles from '../../components/RecommendedArticles';
-import PopularArticles from '../../components/PopularArticles';
+import RecommendedArticles from './RecommendedArticles';
+import PopularArticles from './PopularArticles';
 
 interface ArticleListProps {
   searchTerm: string;
@@ -13,7 +13,10 @@ interface ArticleListProps {
 
 const ArticleList: React.FC<ArticleListProps> = ({ searchTerm }) => {
   const navigate = useNavigate();
-  const [allArticles, setAllArticles] = useState<Article[]>([]);
+  // 推荐
+  const [recommendedArticles, setRecommendedArticles] = useState<Article[]>([]);
+  // 热门
+  const [popularArticles, setPopularArticles] = useState<Article[]>([]);
   const [filteredArticles, setFilteredArticles] = useState<Article[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -33,8 +36,6 @@ const ArticleList: React.FC<ArticleListProps> = ({ searchTerm }) => {
     try {
       setLoading(true);
       const data = await articleApi.getAll();
-      setAllArticles(data);
-      
       // 过滤文章
       let processedArticles = data;
       if (searchTerm) {
@@ -61,7 +62,33 @@ const ArticleList: React.FC<ArticleListProps> = ({ searchTerm }) => {
       // 重置到第一页
       setCurrentPage(1);
     } catch (err) {
-      setError('Failed to fetch articles');
+      setError('获取失败');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // 获取热门文章
+  const fetchPopularArticles = async () => {
+    try {
+      setLoading(true);
+      const data = await articleApi.getPopular(5);
+      setPopularArticles(data);
+    } catch (err) {
+      setError('获取失败');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // 获取推荐文章
+  const fetchRecommendedArticles = async () => {
+    try {
+      setLoading(true);
+      const data = await articleApi.getRecommended(6);
+      setRecommendedArticles(data);
+    } catch (err) {
+      setError('获取失败');
     } finally {
       setLoading(false);
     }
@@ -71,7 +98,12 @@ const ArticleList: React.FC<ArticleListProps> = ({ searchTerm }) => {
     fetchArticles();
   }, [searchTerm, sortBy, sortOrder]);
 
-  if (loading) {
+  useEffect(() => {
+    fetchPopularArticles();
+    fetchRecommendedArticles();
+  }, []);
+
+   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center py-16">
         <div className="w-10 h-10 border-4 border-gray-200 border-t-primary rounded-full animate-spin"></div>
@@ -110,14 +142,14 @@ const ArticleList: React.FC<ArticleListProps> = ({ searchTerm }) => {
   return (
     <div className="py-8">
       {/* 为你推荐模块 */}
-      <RecommendedArticles articles={allArticles.slice(0, 6)} />
+      <RecommendedArticles articles={recommendedArticles} />
       
       {/* 热门文章模块 */}
-      <PopularArticles articles={[...allArticles].sort((a, b) => b.views - a.views)} />
+      <PopularArticles articles={popularArticles} />
       
       <div className="mb-6">
         <div className="flex items-center justify-between mb-3">
-          <h2 className="text-2xl fo-bold text-gray-800">文章列表</h2>
+          <h2 className="text-2xl font-bold text-gray-800">文章列表</h2>
         </div>
         <div className="flex items-center gap-2">
           <select 

@@ -129,6 +129,12 @@ const ArticleDetail: React.FC = () => {
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
       <div className="mb-8">
+        <button 
+          className="w-10 h-10 rounded-full flex items-center justify-center mb-6"
+          onClick={() => navigate('/')}
+        >
+          ←
+        </button>
         <h1 className="text-3xl font-bold text-gray-800 mb-4">{article.title}</h1>
         <div className="flex flex-wrap gap-4 text-sm text-gray-600">
           <span className="font-medium">作者：{article.author}</span>
@@ -144,13 +150,7 @@ const ArticleDetail: React.FC = () => {
       <div className="mb-12 text-gray-700 leading-relaxed">
         <p>{article.content}</p>
       </div>
-      <div className="flex items-center justify-between gap-4 flex-wrap sm:flex-nowrap sm:justify-between">
-        <button 
-          className="w-16 h-16 rounded-full bg-white shadow-sm flex items-center justify-center text-gray-600 hover:bg-gray-50 transition-all duration-300"
-          onClick={() => navigate('/')}
-        >
-          ←
-        </button>
+      <div className="flex items-center justify-end gap-4">
         <div className="flex gap-4">
           <button 
             className={`relative w-16 h-16 rounded-full bg-white shadow-sm flex items-center justify-center text-2xl hover:bg-gray-50 transition-all duration-300 ${isLiked ? 'text-primary' : 'text-gray-600'}`}

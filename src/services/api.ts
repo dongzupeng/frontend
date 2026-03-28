@@ -73,6 +73,12 @@ export const articleApi = {
   getOne: (id: number): Promise<Article> => {
     return api.get(`/articles/${id}`).then((response) => response.data);
   },
+  getPopular: (limit?: number): Promise<Article[]> => {
+    return api.get(`/articles/popular${limit ? `?limit=${limit}` : ''}`).then((response) => response.data);
+  },
+  getRecommended: (limit?: number): Promise<Article[]> => {
+    return api.get(`/articles/recommended${limit ? `?limit=${limit}` : ''}`).then((response) => response.data);
+  },
   create: (article: CreateArticleDto): Promise<Article> => {
     return api.post('/articles', article).then((response) => response.data);
   },
