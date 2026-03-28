@@ -3,6 +3,9 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { articleApi } from '../../services/api';
 import { useAuth } from '../../contexts/AuthContext';
 import type { Article } from '../../types/index';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import rehypeHighlight from 'rehype-highlight';
 
 const ArticleDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -147,8 +150,95 @@ const ArticleDetail: React.FC = () => {
           <img src={article.coverImage} alt={article.title} className="w-full h-auto max-h-[400px] object-cover" />
         </div>
       )}
-      <div className="mb-12 text-gray-700 leading-relaxed">
-        <p>{article.content}</p>
+      <div className="mb-12 text-gray-700 leading-relaxed prose max-w-none">
+        <ReactMarkdown
+          remarkPlugins={[remarkGfm]}
+          rehypePlugins={[rehypeHighlight]}
+          components={{
+            code: ({ inline, className, children, ...props }: any) => {
+              const match = /language-(\w+)/.exec(className || '');
+              const [, language] = match || [];
+              const [copied, setCopied] = React.useState(false);
+              
+              const getCodeText = () => {
+                if (!children) return '';
+                if (typeof children === 'string') return children;
+                if (Array.isArray(children)) {
+                  return children.map(child => {
+                    if (typeof child === 'string') return child;
+                    if (child && typeof child === 'object' && 'props' in child) {
+                      return child.props.children || '';
+                    }
+                    return String(child);
+                  }).join('');
+                }
+                return String(children);
+              };
+              
+              const handleCopy = async () => {
+                const text = getCodeText();
+                try {
+                  await navigator.clipboard.writeText(text);
+                  setCopied(true);
+                  setTimeout(() => setCopied(false), 2000);
+                } catch (err) {
+                  console.error('复制失败:', err);
+                }
+              };
+              
+              return !inline && match ? (
+                <div className="relative my-4 rounded-md overflow-hidden border border-gray-200">
+                  <div className="flex items-center justify-between bg-gray-100 px-4 py-1.5 border-b border-gray-200">
+                    <span className="text-xs text-gray-600 font-mono">{language}</span>
+                    <button 
+                      className={`text-xs transition-colors ${copied ? 'text-green-600' : 'text-gray-600 hover:text-gray-900'}`}
+                      onClick={handleCopy}
+                    >
+                      {copied ? '已复制' : '复制'}
+                    </button>
+                  </div>
+                  <pre className="bg-gray-50 text-gray-800 p-4 overflow-x-auto font-mono text-sm leading-relaxed whitespace-pre">
+                    <code className={`${className} whitespace-pre`} {...props}>
+                      {children}
+                    </code>
+                  </pre>
+                </div>
+              ) : (
+                <code className="bg-gray-100 text-gray-800 px-1 py-0.5 rounded font-mono text-sm" {...props}>
+                  {children}
+                </code>
+              );
+            },
+            p: ({ children, ...props }: any) => (
+              <p className="mb-4 text-gray-700" {...props}>{children}</p>
+            ),
+            h1: ({ children, ...props }: any) => (
+              <h1 className="text-2xl font-bold mb-4 text-gray-900" {...props}>{children}</h1>
+            ),
+            h2: ({ children, ...props }: any) => (
+              <h2 className="text-xl font-bold mb-3 text-gray-800" {...props}>{children}</h2>
+            ),
+            h3: ({ children, ...props }: any) => (
+              <h3 className="text-lg font-bold mb-2 text-gray-800" {...props}>{children}</h3>
+            ),
+            a: ({ children, href, ...props }: any) => (
+              <a href={href} className="text-blue-600 hover:underline" {...props}>{children}</a>
+            ),
+            blockquote: ({ children, ...props }: any) => (
+              <blockquote className="border-l-4 border-gray-300 pl-4 italic text-gray-500 my-4" {...props}>
+                {children}
+              </blockquote>
+            ),
+            ul: ({ children, ...props }: any) => (
+              <ul className="list-disc pl-6 mb-4 text-gray-700" {...props}>{children}</ul>
+            ),
+            ol: ({ children, ...props }: any) => (
+              <ol className="list-decimal pl-6 mb-4 text-gray-700" {...props}>{children}</ol>
+            )
+          }}
+        >
+          {article.content}
+        </ReactMarkdown>
       </div>
       <div className="flex items-center justify-end gap-4">
         <div className="flex gap-4">

@@ -11,6 +11,7 @@ import UserArticles from './pages/Profile/UserArticles.tsx'
 import UserFavorites from './pages/Profile/UserFavorites.tsx'
 import UserLikes from './pages/Profile/UserLikes.tsx'
 import UserHistory from './pages/Profile/UserHistory.tsx'
+import UserDrafts from './pages/Profile/UserDrafts.tsx'
 import FollowingPage from './pages/Following/Following.tsx'
 import MessagesPage from './pages/Messages/Messages.tsx'
 import PrivateRoute from './components/PrivateRoute.tsx'
@@ -115,6 +116,7 @@ function App() {
               <Route path="/profile/favorites" element={<UserFavorites />} />
               <Route path="/profile/likes" element={<UserLikes />} />
               <Route path="/profile/history" element={<UserHistory />} />
+              <Route path="/profile/drafts" element={<UserDrafts />} />
             </Route>
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />

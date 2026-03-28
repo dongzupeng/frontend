@@ -132,6 +132,25 @@ export const articleApi = {
   },
 };
 
+// 草稿API封装
+export const draftApi = {
+  create: (draft: any): Promise<any> => {
+    return api.post('/drafts', draft).then((response) => response.data);
+  },
+  getAll: (): Promise<any[]> => {
+    return api.get('/drafts').then((response) => response.data);
+  },
+  getOne: (id: number): Promise<any> => {
+    return api.get(`/drafts/${id}`).then((response) => response.data);
+  },
+  update: (id: number, draft: any): Promise<any> => {
+    return api.put(`/drafts/${id}`, draft).then((response) => response.data);
+  },
+  delete: (id: number): Promise<void> => {
+    return api.delete(`/drafts/${id}`).then(() => {});
+  },
+};
+
 // 认证API封装
 export const authApi = {
   login: (credentials: LoginDto): Promise<LoginResponse> => {
