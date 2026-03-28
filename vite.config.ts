@@ -3,19 +3,17 @@ import react, { reactCompilerPreset } from '@vitejs/plugin-react'
 import babel from '@rolldown/plugin-babel'
 import { visualizer } from 'rollup-plugin-visualizer'
 
+import { cloudflare } from "@cloudflare/vite-plugin";
+
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [
-    react(),
-    babel({ presets: [reactCompilerPreset()] }),
-    // 代码可视化插件
-    visualizer({
-      open: false,
-      gzipSize: true,
-      brotliSize: true,
-      filename: 'dist/stats.html'
-    })
-  ],
+  plugins: [react(), babel({ presets: [reactCompilerPreset()] }), // 代码可视化插件
+  visualizer({
+    open: false,
+    gzipSize: true,
+    brotliSize: true,
+    filename: 'dist/stats.html'
+  }), cloudflare()],
   
   // 构建优化
   build: {
