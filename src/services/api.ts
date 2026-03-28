@@ -56,6 +56,9 @@ api.interceptors.response.use(
       if (window.location.pathname !== '/login') {
         window.location.href = '/login';
       }
+    } else {
+      // 其他错误
+      (window as any).toast.error(error.response?.data?.message || '请求失败，请稍后重试');
     }
     
     return Promise.reject(error);

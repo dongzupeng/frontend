@@ -8,7 +8,6 @@ const Login: React.FC = () => {
   const { login } = useAuth();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
   // 从location.state中获取之前尝试访问的页面
@@ -16,7 +15,6 @@ const Login: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
     setLoading(true);
 
     try {
@@ -24,7 +22,12 @@ const Login: React.FC = () => {
       // 登录成功后重定向回之前的页面
       navigate(from, { replace: true });
     } catch (err: any) {
-      setError(err.response?.data?.message || '登录失败，请检查用户名和密码');
+      // 判断状态码是否为401
+      if (err.response?.status === 401) {
+        // 登录已过期，跳转到登录页面
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+      }
     } finally {
       setLoading(false);
     }
