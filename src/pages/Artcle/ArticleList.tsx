@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { articleApi } from '../../services/api';
 import type { Article } from '../../types/index';
 import ConfirmDialog from '../../components/ConfirmDialog';
+import ArticleCard from '../../components/ArticleCard';
 
 interface ArticleListProps {
   searchTerm: string;
@@ -148,60 +149,16 @@ const ArticleList: React.FC<ArticleListProps> = ({ searchTerm }) => {
         <div className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {currentArticles.map((article) => (
-              <div 
-                key={article.id} 
-                className="bg-white rounded-lg shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden cursor-pointer"
-                onClick={() => navigate(`/article/${article.id}`)}
-              >
-                {article.coverImage && (
-                  <div className="w-full h-48 overflow-hidden">
-                    <img 
-                      src={article.coverImage} 
-                      alt={article.title} 
-                      className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
-                    />
-                  </div>
-                )}
-                <div className="p-4">
-                  <h3 className="text-lg font-semibold text-gray-800 mb-2 line-clamp-2">{article.title}</h3>
-                  <div className="flex flex-wrap items-center justify-between gap-2 text-sm text-gray-500">
-                    <div className="flex flex-wrap items-center gap-3">
-                      <span className="font-medium text-gray-700">{article.author}</span>
-                      <span>{new Date(article.createdAt).toLocaleDateString()}</span>
-                      <span className="flex items-center gap-1">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                          <circle cx="12" cy="12" r="3"></circle>
-                        </svg>
-                        {article.views}
-                      </span>
-                    </div>
-                    <div className="flex gap-2">
-                      <button 
-                        className="px-3 py-1.5 bg-primary/10 text-primary rounded-lg text-sm transition-all duration-300 hover:bg-primary/20"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          navigate(`/edit/${article.id}`);
-                        }}
-                      >
-                        编辑
-                      </button>
-                      <button 
-                        className="px-3 py-1.5 bg-red-100 text-red-600 rounded-lg text-sm transition-all duration-300 hover:bg-red-200"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setConfirmDialog({
-                            isOpen: true,
-                            articleId: article.id,
-                          });
-                        }}
-                      >
-                        删除
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <ArticleCard
+                key={article.id}
+                article={article}
+                onEdit={(id) => navigate(`/edit/${id}`)}
+                onDelete={(id) => setConfirmDialog({
+                  isOpen: true,
+                  articleId: id,
+                })}
+                showActions={true}
+              />
             ))}
           </div>
           

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { articleApi } from '../../services/api';
 import ConfirmDialog from '../../components/ConfirmDialog';
+import ArticleCard from '../../components/ArticleCard';
 import type { Article } from '../../types/index';
 
 const UserHistory: React.FC = () => {
@@ -45,10 +46,6 @@ const UserHistory: React.FC = () => {
     }
   };
 
-  const handleArticleClick = (id: number) => {
-    navigate(`/article/${id}`);
-  };
-
   const handleClearHistory = () => {
     setConfirmDialog({
       isOpen: true,
@@ -76,32 +73,6 @@ const UserHistory: React.FC = () => {
     });
   };
 
-  const formatTime = (timestamp: string) => {
-    const date = new Date(timestamp);
-    const now = new Date();
-    const diff = now.getTime() - date.getTime();
-    
-    // 小于1小时显示"X分钟前"
-    if (diff < 60 * 60 * 1000) {
-      const minutes = Math.floor(diff / (60 * 1000));
-      return minutes < 1 ? '刚刚' : `${minutes}分钟前`;
-    }
-    
-    // 小于24小时显示"X小时前"
-    if (diff < 24 * 60 * 60 * 1000) {
-      const hours = Math.floor(diff / (60 * 60 * 1000));
-      return `${hours}小时前`;
-    }
-    
-    // 小于7天显示"X天前"
-    if (diff < 7 * 24 * 60 * 60 * 1000) {
-      const days = Math.floor(diff / (24 * 60 * 60 * 1000));
-      return `${days}天前`;
-    }
-    
-    // 否则显示具体日期
-    return date.toLocaleDateString();
-  };
 
   if (loading) {
     return (
@@ -161,32 +132,11 @@ const UserHistory: React.FC = () => {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {articles.map((article: any) => (
-              <div 
-                key={article.id} 
-                className="bg-white rounded-lg shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden"
-                onClick={() => handleArticleClick(article.id)}
-              >
-                {article.coverImage && (
-                  <div className="w-full h-48 overflow-hidden">
-                    <img src={article.coverImage} alt={article.title} className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
-                  </div>
-                )}
-                <div className="p-4">
-                  <h3 className="text-lg font-semibold text-gray-800 mb-2 line-clamp-2">{article.title}</h3>
-                  <p className="text-gray-600 text-sm mb-4 line-clamp-2">
-                    {article.content.substring(0, 100)}...
-                  </p>
-                  <div className="flex flex-wrap gap-3 text-sm text-gray-500 mb-4">
-                    <span className="font-medium">{article.author}</span>
-                    <span>{formatTime(article.viewTime)}</span>
-                  </div>
-                  <div className="flex gap-3 text-sm text-gray-500">
-                    <span className="flex items-center gap-1">👁 {article.views}</span>
-                    <span className="flex items-center gap-1">👍 {article.likes}</span>
-                    <span className="flex items-center gap-1">⭐ {article.favorites}</span>
-                  </div>
-                </div>
-              </div>
+              <ArticleCard
+                key={article.id}
+                article={article}
+                showActions={false}
+              />
             ))}
           </div>
         )}

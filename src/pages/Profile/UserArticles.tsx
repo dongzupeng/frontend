@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { articleApi } from '../../services/api';
 import { useAuth } from '../../contexts/AuthContext';
 import ConfirmDialog from '../../components/ConfirmDialog';
+import ArticleCard from '../../components/ArticleCard';
 import type { Article } from '../../types/index';
 
 const UserArticles: React.FC = () => {
@@ -35,23 +36,6 @@ const UserArticles: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
-
-  const handleArticleClick = (id: number) => {
-    navigate(`/article/${id}`);
-  };
-
-  const handleEdit = (e: React.MouseEvent, id: number) => {
-    e.stopPropagation();
-    navigate(`/edit/${id}`);
-  };
-
-  const handleDelete = (e: React.MouseEvent, id: number) => {
-    e.stopPropagation();
-    setConfirmDialog({
-      isOpen: true,
-      articleId: id,
-    });
   };
 
   const confirmDelete = async () => {
@@ -128,45 +112,16 @@ const UserArticles: React.FC = () => {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {articles.map(article => (
-              <div 
-                key={article.id} 
-                className="bg-white rounded-lg shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden"
-                onClick={() => handleArticleClick(article.id)}
-              >
-                {article.coverImage && (
-                  <div className="w-full h-48 overflow-hidden">
-                    <img src={article.coverImage} alt={article.title} className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
-                  </div>
-                )}
-                <div className="p-4">
-                  <h3 className="text-lg font-semibold text-gray-800 mb-2 line-clamp-2">{article.title}</h3>
-                  <p className="text-gray-600 text-sm mb-4 line-clamp-2">
-                    {article.content.substring(0, 100)}...
-                  </p>
-                  <div className="flex flex-wrap justify-between items-center text-sm text-gray-500 mb-4">
-                    <span>{new Date(article.createdAt).toLocaleDateString()}</span>
-                    <div className="flex gap-3">
-                      <span className="flex items-center gap-1">👁 {article.views}</span>
-                      <span className="flex items-center gap-1">👍 {article.likes}</span>
-                      <span className="flex items-center gap-1">⭐ {article.favorites}</span>
-                    </div>
-                  </div>
-                  <div className="flex gap-2">
-                    <button 
-                      className="flex-1 px-3 py-2 bg-primary/10 text-primary rounded-lg hover:bg-primary/20 transition-all duration-300 text-sm"
-                      onClick={(e) => handleEdit(e, article.id)}
-                    >
-                      编辑
-                    </button>
-                    <button 
-                      className="flex-1 px-3 py-2 bg-red-100 text-red-800 rounded-lg hover:bg-red-200 transition-all duration-300 text-sm"
-                      onClick={(e) => handleDelete(e, article.id)}
-                    >
-                      删除
-                    </button>
-                  </div>
-                </div>
-              </div>
+              <ArticleCard
+                key={article.id}
+                article={article}
+                onEdit={(id) => navigate(`/edit/${id}`)}
+                onDelete={(id) => setConfirmDialog({
+                  isOpen: true,
+                  articleId: id,
+                })}
+                showActions={true}
+              />
             ))}
           </div>
         )}
