@@ -1,23 +1,35 @@
-import { useState } from 'react';
+import { useState, Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useParams, Outlet, useOutletContext } from 'react-router-dom'
-import ArticleList from './pages/Artcle/ArticleList.tsx'
-import ArticleDetail from './pages/Artcle/ArticleDetail.tsx'
-import ArticleForm from './pages/Artcle/ArticleForm.tsx'
-import Login from './pages/Auth/Login.tsx'
-import Register from './pages/Auth/Register.tsx'
-import Profile from './pages/Profile/Profile.tsx'
-import ProfileEdit from './pages/Profile/ProfileEdit.tsx'
-import UserArticles from './pages/Profile/UserArticles.tsx'
-import UserFavorites from './pages/Profile/UserFavorites.tsx'
-import UserLikes from './pages/Profile/UserLikes.tsx'
-import UserHistory from './pages/Profile/UserHistory.tsx'
-import UserDrafts from './pages/Profile/UserDrafts.tsx'
-import FollowingPage from './pages/Following/Following.tsx'
-import MessagesPage from './pages/Messages/Messages.tsx'
-import PrivateRoute from './components/PrivateRoute.tsx'
-import TabBar from './components/TabBar.tsx'
 import { AuthProvider, useAuth } from './contexts/AuthContext.tsx'
 import { ToastManager } from './components/Toast.tsx'
+import TabBar from './components/TabBar.tsx'
+import PrivateRoute from './components/PrivateRoute.tsx'
+
+// 懒加载页面组件
+const ArticleList = lazy(() => import('./pages/Artcle/ArticleList.tsx'))
+const ArticleDetail = lazy(() => import('./pages/Artcle/ArticleDetail.tsx'))
+const ArticleForm = lazy(() => import('./pages/Artcle/ArticleForm.tsx'))
+const Login = lazy(() => import('./pages/Auth/Login.tsx'))
+const Register = lazy(() => import('./pages/Auth/Register.tsx'))
+const Profile = lazy(() => import('./pages/Profile/Profile.tsx'))
+const ProfileEdit = lazy(() => import('./pages/Profile/ProfileEdit.tsx'))
+const UserArticles = lazy(() => import('./pages/Profile/UserArticles.tsx'))
+const UserFavorites = lazy(() => import('./pages/Profile/UserFavorites.tsx'))
+const UserLikes = lazy(() => import('./pages/Profile/UserLikes.tsx'))
+const UserHistory = lazy(() => import('./pages/Profile/UserHistory.tsx'))
+const UserDrafts = lazy(() => import('./pages/Profile/UserDrafts.tsx'))
+const FollowingPage = lazy(() => import('./pages/Following/Following.tsx'))
+const MessagesPage = lazy(() => import('./pages/Messages/Messages.tsx'))
+
+// 加载状态组件
+const PageLoading = () => (
+  <div className="min-h-screen bg-white flex items-center justify-center">
+    <div className="flex flex-col items-center">
+      <div className="w-10 h-10 border-4 border-gray-200 border-t-primary rounded-full animate-spin"></div>
+      <p className="mt-4 text-gray-600">加载中...</p>
+    </div>
+  </div>
+)
 
 // 编辑页面包装组件
 const EditArticlePage = () => {
@@ -87,52 +99,52 @@ const ProfileLayout = () => {
   );
 };
 
-function App() {
-  return (
-    <AuthProvider>
-      <Router>
-        <ToastManager />
-        <Routes>
-          {/* 带头部和底部的路由 */}
-          <Route element={<MainLayout />}>
-            <Route path="/" element={<ArticleListWrapper />} />
-          </Route>
-          
-          {/* Profile页面路由 */}
-          <Route element={<ProfileLayout />}>
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/following" element={<FollowingPage />} />
-            <Route path="/messages" element={<MessagesPage />} />
-          </Route>
-          
-          {/* 不带头部和底部的路由 */}
-          <Route element={<FormLayout />}>
-            <Route path="/article/:id" element={<ArticleDetail />} />
-            <Route element={<PrivateRoute />}>
-              <Route path="/create" element={<ArticleForm />} />
-              <Route path="/edit/:id" element={<EditArticlePage />} />
-              <Route path="/profile/edit" element={<ProfileEdit />} />
-              <Route path="/profile/articles" element={<UserArticles />} />
-              <Route path="/profile/favorites" element={<UserFavorites />} />
-              <Route path="/profile/likes" element={<UserLikes />} />
-              <Route path="/profile/history" element={<UserHistory />} />
-              <Route path="/profile/drafts" element={<UserDrafts />} />
-            </Route>
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-          </Route>
-        </Routes>
-      </Router>
-    </AuthProvider>
-  )
-}
-
 // 文章列表包装组件，用于接收搜索词
 const ArticleListWrapper = () => {
   const { searchTerm } = useOutletContext<{ searchTerm: string }>();
   return <ArticleList searchTerm={searchTerm} />;
 };
 
-
+function App() {
+  return (
+    <AuthProvider>
+      <Router>
+        <ToastManager />
+        <Suspense fallback={<PageLoading />}>
+          <Routes>
+            {/* 带头部和底部的路由 */}
+            <Route element={<MainLayout />}>
+              <Route path="/" element={<ArticleListWrapper />} />
+            </Route>
+            
+            {/* Profile页面路由 */}
+            <Route element={<ProfileLayout />}>
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/following" element={<FollowingPage />} />
+              <Route path="/messages" element={<MessagesPage />} />
+            </Route>
+            
+            {/* 不带头部和底部的路由 */}
+            <Route element={<FormLayout />}>
+              <Route path="/article/:id" element={<ArticleDetail />} />
+              <Route element={<PrivateRoute />}>
+                <Route path="/create" element={<ArticleForm />} />
+                <Route path="/edit/:id" element={<EditArticlePage />} />
+                <Route path="/profile/edit" element={<ProfileEdit />} />
+                <Route path="/profile/articles" element={<UserArticles />} />
+                <Route path="/profile/favorites" element={<UserFavorites />} />
+                <Route path="/profile/likes" element={<UserLikes />} />
+                <Route path="/profile/history" element={<UserHistory />} />
+                <Route path="/profile/drafts" element={<UserDrafts />} />
+              </Route>
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+            </Route>
+          </Routes>
+        </Suspense>
+      </Router>
+    </AuthProvider>
+  )
+}
 
 export default App
