@@ -41,10 +41,9 @@ const Login: React.FC = () => {
         </button>
         <h1 className="text-2xl font-bold text-gray-800 mb-2">立即登录</h1>
         <p className="text-gray-500 mb-10">鱼塘博客，文化传承新力量</p>
-        {error && <div className="mb-6 p-3 bg-red-50 text-red-600 rounded-lg text-sm">{error}</div>}
         <form onSubmit={handleSubmit}>
           <div className="mb-6">
-            <div className="mb-2 text-sm text-gray-500">用户名/电子邮件/手机号</div>
+            <div className="mb-2 text-sm text-gray-500">用户名/电子邮件</div>
             <input
               type="text"
               id="username"

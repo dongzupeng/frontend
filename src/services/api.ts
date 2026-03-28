@@ -41,6 +41,23 @@ api.interceptors.response.use(
     console.error('API Error:', error);
     
     // 处理401错误
+    if (error.response && error.response.status === 401) {
+      // 清除认证token
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      
+      // 显示错误提示
+      if ((window as any).toast) {
+        (window as any).toast.error(error.response?.data?.message || '登录已过期，请重新登录');
+      }
+      
+      // 跳转到登录页面
+      // 判断是否当前页面是登录页面
+      if (window.location.pathname !== '/login') {
+        window.location.href = '/login';
+      }
+    }
+    
     return Promise.reject(error);
   }
 );
