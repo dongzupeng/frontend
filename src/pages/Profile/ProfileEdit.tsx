@@ -7,6 +7,7 @@ const ProfileEdit: React.FC = () => {
   const { user, updateUserInfo } = useAuth();
   const navigate = useNavigate();
   const [username, setUsername] = useState<string>(user?.username || '');
+  const [email, setEmail] = useState<string>(user?.email || '');
   const [avatar, setAvatar] = useState<string>('');
   const [bio, setBio] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
@@ -16,6 +17,7 @@ const ProfileEdit: React.FC = () => {
   useEffect(() => {
     if (user) {
       setUsername(user.username || '');
+      setEmail(user.email || '');
       setAvatar(user.avatar || '');
       setBio(user.bio || '');
     }
@@ -34,7 +36,7 @@ const ProfileEdit: React.FC = () => {
     try {
       setLoading(true);
       // 调用updateUser API
-      await updateUserInfo({ username, avatar, bio });
+      await updateUserInfo({ username, email, avatar, bio });
       setSuccess('个人资料更新成功');
       // 1秒后返回个人页面
       setTimeout(() => {
@@ -88,6 +90,18 @@ const ProfileEdit: React.FC = () => {
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               placeholder="请输入用户名"
+              required
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-gray-600 bg-transparent placeholder-gray-400"
+            />
+          </div>
+          <div className="mb-6">
+            <div className="mb-2 text-sm text-gray-500">邮箱</div>
+            <input
+              type="email"
+              id="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="请输入邮箱"
               required
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-gray-600 bg-transparent placeholder-gray-400"
             />
