@@ -65,7 +65,9 @@ const UserFavorites: React.FC = () => {
         // 更新界面
         setArticles(articles.filter(article => article.id !== confirmDialog.articleId));
       } catch (err) {
-        alert('取消收藏失败');
+        if ((window as any).toast) {
+          (window as any).toast.error('取消收藏失败');
+        }
       } finally {
         setConfirmDialog({
           isOpen: false,

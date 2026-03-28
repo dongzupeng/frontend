@@ -39,6 +39,8 @@ api.interceptors.response.use(
   (error) => {
     // 统一错误处理
     console.error('API Error:', error);
+    
+    // 处理401错误
     return Promise.reject(error);
   }
 );

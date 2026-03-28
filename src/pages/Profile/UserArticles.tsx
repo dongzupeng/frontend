@@ -60,7 +60,9 @@ const UserArticles: React.FC = () => {
         await articleApi.delete(confirmDialog.articleId);
         setArticles(articles.filter(article => article.id !== confirmDialog.articleId));
       } catch (err) {
-        alert('删除失败');
+        if ((window as any).toast) {
+          (window as any).toast.error('删除失败');
+        }
       } finally {
         setConfirmDialog({
           isOpen: false,

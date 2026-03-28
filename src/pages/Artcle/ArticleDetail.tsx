@@ -75,7 +75,15 @@ const ArticleDetail: React.FC = () => {
 
   // 处理点赞
   const handleLike = async () => {
-    if (!id || !user) return;
+    if (!id) return;
+    
+    if (!user) {
+      // 未登录时显示提示
+      if ((window as any).toast) {
+        (window as any).toast.warning('请先登录后再进行操作');
+      }
+      return;
+    }
     
     try {
       const updatedArticle = await articleApi.toggleLike(parseInt(id));
@@ -88,7 +96,15 @@ const ArticleDetail: React.FC = () => {
 
   // 处理收藏
   const handleFavorite = async () => {
-    if (!id || !user) return;
+    if (!id) return;
+    
+    if (!user) {
+      // 未登录时显示提示
+      if ((window as any).toast) {
+        (window as any).toast.warning('请先登录后再进行操作');
+      }
+      return;
+    }
     
     try {
       const updatedArticle = await articleApi.toggleFavorite(parseInt(id));

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, Link, useParams, Outlet, useOutletContext } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, Link, useParams, Outlet, useOutletContext, useNavigate } from 'react-router-dom'
 import ArticleList from './pages/Artcle/ArticleListNew.tsx'
 import ArticleDetail from './pages/Artcle/ArticleDetail.tsx'
 import ArticleForm from './pages/Artcle/ArticleForm.tsx'
@@ -11,9 +11,12 @@ import UserArticles from './pages/Profile/UserArticles.tsx'
 import UserFavorites from './pages/Profile/UserFavorites.tsx'
 import UserLikes from './pages/Profile/UserLikes.tsx'
 import UserHistory from './pages/Profile/UserHistory.tsx'
+import FollowingPage from './pages/Following/Following.tsx'
+import MessagesPage from './pages/Messages/Messages.tsx'
 import PrivateRoute from './components/PrivateRoute.tsx'
 import TabBar from './components/TabBar.tsx'
 import { AuthProvider, useAuth } from './contexts/AuthContext.tsx'
+import { ToastManager } from './components/Toast.tsx'
 
 // 编辑页面包装组件
 const EditArticlePage = () => {
@@ -87,17 +90,18 @@ function App() {
   return (
     <AuthProvider>
       <Router>
+        <ToastManager />
         <Routes>
           {/* 带头部和底部的路由 */}
           <Route element={<MainLayout />}>
             <Route path="/" element={<ArticleListWrapper />} />
-            <Route path="/search" element={<SearchPage />} />
-            <Route path="/messages" element={<MessagesPage />} />
           </Route>
           
           {/* Profile页面路由 */}
           <Route element={<ProfileLayout />}>
             <Route path="/profile" element={<Profile />} />
+            <Route path="/following" element={<FollowingPage />} />
+            <Route path="/messages" element={<MessagesPage />} />
           </Route>
           
           {/* 不带头部和底部的路由 */}
@@ -127,30 +131,6 @@ const ArticleListWrapper = () => {
   return <ArticleList searchTerm={searchTerm} />;
 };
 
-// 搜索页面组件
-const SearchPage = () => {
-  return (
-    <div className="py-8">
-      <h2 className="text-2xl font-bold text-gray-800 mb-6 text-left">搜索</h2>
-      <div className="flex flex-col items-center justify-center py-16">
-        <div className="text-4xl mb-4">🔍</div>
-        <p className="text-gray-600 mb-6">搜索功能开发中</p>
-      </div>
-    </div>
-  );
-};
 
-// 消息页面组件
-const MessagesPage = () => {
-  return (
-    <div className="py-8">
-      <h2 className="text-2xl font-bold text-gray-800 mb-6 text-left">消息</h2>
-      <div className="flex flex-col items-center justify-center py-16">
-        <div className="text-4xl mb-4">💬</div>
-        <p className="text-gray-600 mb-6">消息功能开发中</p>
-      </div>
-    </div>
-  );
-};
 
 export default App

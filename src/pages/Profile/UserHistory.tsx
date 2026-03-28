@@ -60,7 +60,9 @@ const UserHistory: React.FC = () => {
       await articleApi.clearHistory();
       setArticles([]);
     } catch (err) {
-      alert('清空浏览历史失败');
+      if ((window as any).toast) {
+        (window as any).toast.error('清空浏览历史失败');
+      }
     } finally {
       setConfirmDialog({
         isOpen: false,

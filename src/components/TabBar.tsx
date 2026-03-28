@@ -25,14 +25,16 @@ const TabBar: React.FC<TabBarProps> = () => {
         </div>
         <span className="text-xs">首页</span>
       </Link>
-      <Link to="/search" className={getTabClass('/search')}>
+      <Link to="/following" className={getTabClass('/following')}>
         <div className="w-6 h-6 flex items-center justify-center">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="11" cy="11" r="8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            <path d="M21 21L16.65 16.65" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            <circle cx="9" cy="7" r="4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            <path d="M22 21v-2a4 4 0 0 0-3-3.87" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
         </div>
-        <span className="text-xs">搜索</span>
+        <span className="text-xs">关注</span>
       </Link>
       <Link to="/create" className="relative flex-1">
         <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2">
