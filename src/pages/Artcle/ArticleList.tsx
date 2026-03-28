@@ -4,6 +4,8 @@ import { articleApi } from '../../services/api';
 import type { Article } from '../../types/index';
 import ConfirmDialog from '../../components/ConfirmDialog';
 import ArticleCard from '../../components/ArticleCard';
+import RecommendedArticles from '../../components/RecommendedArticles';
+import PopularArticles from '../../components/PopularArticles';
 
 interface ArticleListProps {
   searchTerm: string;
@@ -11,6 +13,7 @@ interface ArticleListProps {
 
 const ArticleList: React.FC<ArticleListProps> = ({ searchTerm }) => {
   const navigate = useNavigate();
+  const [allArticles, setAllArticles] = useState<Article[]>([]);
   const [filteredArticles, setFilteredArticles] = useState<Article[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -30,6 +33,7 @@ const ArticleList: React.FC<ArticleListProps> = ({ searchTerm }) => {
     try {
       setLoading(true);
       const data = await articleApi.getAll();
+      setAllArticles(data);
       
       // 过滤文章
       let processedArticles = data;
@@ -105,32 +109,32 @@ const ArticleList: React.FC<ArticleListProps> = ({ searchTerm }) => {
 
   return (
     <div className="py-8">
-      <div className="flex items-center justify-between mb-6">
-        <div className="flex items-center gap-4">
-          <h2 className="text-2xl font-bold text-gray-800">文章列表</h2>
-          <div className="flex items-center gap-2">
-            <select 
-              value={sortBy} 
-              onChange={(e) => setSortBy(e.target.value as 'createdAt' | 'views')}
-              className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm text-gray-600 bg-white"
-            >
-              <option value="createdAt">按发布时间</option>
-              <option value="views">按阅读量</option>
-            </select>
-            <button 
-              className="w-10 h-10 rounded-lg border border-gray-300 flex items-center justify-center text-gray-600 hover:bg-gray-50 transition-all duration-300"
-              onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
-            >
-              {sortOrder === 'asc' ? '↑' : '↓'}
-            </button>
-          </div>
+      {/* 为你推荐模块 */}
+      <RecommendedArticles articles={allArticles.slice(0, 6)} />
+      
+      {/* 热门文章模块 */}
+      <PopularArticles articles={[...allArticles].sort((a, b) => b.views - a.views)} />
+      
+      <div className="mb-6">
+        <div className="flex items-center justify-between mb-3">
+          <h2 className="text-2xl fo-bold text-gray-800">文章列表</h2>
         </div>
-        <button 
-          className="px-6 py-3 bg-primary/10 text-primary rounded-lg font-medium transition-all duration-300 hover:bg-primary/20"
-          onClick={() => navigate('/create')}
-        >
-          创建文章
-        </button>
+        <div className="flex items-center gap-2">
+          <select 
+            value={sortBy} 
+            onChange={(e) => setSortBy(e.target.value as 'createdAt' | 'views')}
+            className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm text-gray-600 bg-white"
+          >
+            <option value="createdAt">按发布时间</option>
+            <option value="views">按阅读量</option>
+          </select>
+          <button 
+            className="w-10 h-10 rounded-lg border border-gray-300 flex items-center justify-center text-gray-600 hover:bg-gray-50 transition-all duration-300"
+            onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
+          >
+            {sortOrder === 'asc' ? '↑' : '↓'}
+          </button>
+        </div>
       </div>
       
       {filteredArticles.length === 0 ? (
@@ -157,7 +161,7 @@ const ArticleList: React.FC<ArticleListProps> = ({ searchTerm }) => {
                   isOpen: true,
                   articleId: id,
                 })}
-                showActions={true}
+                showActions={false}
               />
             ))}
           </div>

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useParams, Outlet, useOutletContext } from 'react-router-dom'
-import ArticleList from './pages/Artcle/ArticleListNew.tsx'
+import ArticleList from './pages/Artcle/ArticleList.tsx'
 import ArticleDetail from './pages/Artcle/ArticleDetail.tsx'
 import ArticleForm from './pages/Artcle/ArticleForm.tsx'
 import Login from './pages/Auth/Login.tsx'
